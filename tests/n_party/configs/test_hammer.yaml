@@ -1,0 +1,3 @@
+binary_location: "bin/three_party_test_hammer"
+test_location: "verifiers/three_party_test_hammer"
+

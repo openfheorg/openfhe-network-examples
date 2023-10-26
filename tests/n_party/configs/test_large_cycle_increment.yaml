@@ -1,0 +1,8 @@
+binary_location: "bin/large_cycle_increment"
+test_location: "verifiers/large_cycle_increment"
+network_map_location: "mult_of_3_large_nmap.txt"
+
+nodes:
+  num_nodes: 60
+  port_start: 50051
+  modes: []

@@ -1,0 +1,87 @@
+---
+- hosts: [Node1, Node2]
+  become: yes
+  tasks:
+    - name: include our variables for the build
+      include_vars: vars/hosts.yml
+
+    - name: install packages
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - ntp
+        - ethtool
+        - tcpdump
+        - lldpd
+
+    - name: set hostname
+      hostname:
+        name: "{{ setup[inventory_hostname].name }}"
+
+    - name: remove address from ifaces
+      command: "ip addr flush dev {{ item.eth }}"
+      ignore_errors: yes
+      loop: "{{ setup[inventory_hostname].ips }}"
+
+    - name: add address v4
+      command: "ip addr add {{ item.ipv4 }}/24 dev {{ item.eth }}"
+      loop: "{{ setup[inventory_hostname].ips }}"
+
+    - name: set interface up
+      command: "ip link set dev {{ item.eth }} up"
+      loop: "{{ setup[inventory_hostname].ips }}"
+
+    - name: add route for other node
+      command: "ip route add {{ item.route }} via {{ item.gw }}"
+      loop: "{{ setup[inventory_hostname].ips }}"
+
+    - name: setup custom dns
+      template:
+        src: hosts.template
+        dest: /etc/hosts
+      become: yes
+
+- hosts: [Router1]
+  become: yes
+  tasks:
+    - name: include our variables for the build
+      include_vars: vars/hosts.yml
+
+    - name: install packages
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - ntp
+        - ethtool
+        - tcpdump
+        - lldpd
+
+    - name: set hostname
+      hostname:
+        name: "{{ setup[inventory_hostname].name }}"
+
+    - name: remove address from ifaces
+      command: "ip addr flush dev {{ item.eth }}"
+      ignore_errors: yes
+      loop: "{{ setup[inventory_hostname].ips }}"
+
+    - name: add address v4
+      command: "ip addr add {{ item.ipv4 }}/24 dev {{ item.eth }}"
+      loop: "{{ setup[inventory_hostname].ips }}"
+
+    - name: set interface up
+      command: "ip link set dev {{ item.eth }} up"
+      loop: "{{ setup[inventory_hostname].ips }}"
+
+    - name: enable ipv4 forwarding
+      command: sysctl -w net.ipv4.ip_forward=1
+
+    - name: setup custom dns
+      template:
+        src: hosts.template
+        dest: /etc/hosts
+      become: yes

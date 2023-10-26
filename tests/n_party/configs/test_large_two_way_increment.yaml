@@ -1,0 +1,8 @@
+binary_location: "bin/large_two_way_increment"
+test_location: "verifiers/large_two_way_increment"
+network_map_location: "large_nmap.txt"
+
+nodes:
+  num_nodes: 50
+  port_start: 50051
+  modes: []

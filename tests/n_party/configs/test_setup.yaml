@@ -1,0 +1,2 @@
+binary_location: "bin/three_party_test_setup"
+test_location: "verifiers/three_party_test_setup"

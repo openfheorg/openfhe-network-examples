@@ -1,0 +1,15 @@
+# Common config
+config:
+  ssl_cert_path: "-Wssloff"
+  network_map_location: "nmap.txt"
+  active: true
+
+# Config specific to
+# Mode:
+#   0: server
+#   1: controller
+#   2: client
+nodes:
+  num_nodes: 3
+  port_start: 50051
+  modes: 0, 2, 2

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package peer_to_peer;
+
+// tags identifing the requests
+enum RequestTag {
+    INVALID_REQUEST                             = 0;
+    NODE_MESSAGE                     = 1;
+}
+
+//===============================================================================
+service NodeServer {
+    rpc sendGRPCMsg(RequestMessage) returns (ReturnMessage) {}
+}
+
+message RequestMessage {
+    // string dummy = 1;
+    string node_name = 1;
+    string data_type = 2;
+    bytes data = 3;
+
+}
+
+message ReturnMessage {
+    bool acknowledgement = 1;
+    string error_msg = 2;
+}

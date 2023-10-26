@@ -1,0 +1,3 @@
+# What happens if our party receiving messages drops off all of a sudden?
+binary_location: "bin/three_party_test_dropout_receiver"
+test_location: "verifiers/three_party_test_dropout_receiver"

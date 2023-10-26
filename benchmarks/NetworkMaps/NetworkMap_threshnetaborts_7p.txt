@@ -1,0 +1,7 @@
+Node1-Node2@localhost:50052,Node3@localhost:50053,Node4@localhost:50054,Node5@localhost:50055,Node6@localhost:50056,Node7@localhost:50057
+Node2-Node1@localhost:50051,Node3@localhost:50053,Node4@localhost:50054,Node5@localhost:50055,Node6@localhost:50056,Node7@localhost:50057
+Node3-Node1@localhost:50051,Node2@localhost:50052,Node4@localhost:50054,Node5@localhost:50055,Node6@localhost:50056,Node7@localhost:50057
+Node4-Node1@localhost:50051,Node2@localhost:50052,Node3@localhost:50053,Node5@localhost:50055,Node6@localhost:50056,Node7@localhost:50057
+Node5-Node1@localhost:50051,Node2@localhost:50052,Node3@localhost:50053,Node4@localhost:50054,Node6@localhost:50056,Node7@localhost:50057
+Node6-Node1@localhost:50051,Node2@localhost:50052,Node3@localhost:50053,Node4@localhost:50054,Node5@localhost:50055,Node7@localhost:50057
+Node7-Node1@localhost:50051,Node2@localhost:50052,Node3@localhost:50053,Node4@localhost:50054,Node5@localhost:50055,Node6@localhost:50056

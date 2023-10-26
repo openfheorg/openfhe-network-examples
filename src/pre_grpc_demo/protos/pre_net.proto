@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package pre_net;
+
+// tags identifing the requests
+enum RequestTag {
+    INVALID_REQUEST                             = 0;
+    CRYPTO_CONTEXT_FOR_PRODUCER_REQUEST         = 1;
+    PRIVATE_KEY_FROM_PRODUCER_REQUEST           = 2;
+    PUBLIC_KEY_FROM_PRODUCER_REQUEST            = 3;
+    CIPHER_TEXT_FROM_PRODUCER_REQUEST           = 4;
+    CRYPTO_CONTEXT_FOR_BROKER_REQUEST           = 5;
+    PUBLIC_KEY_TO_BROKER_REQUEST                = 6;
+    REENCRYPTION_KEY_TO_BROKER_REQUEST          = 7;
+    CRYPTO_CONTEXT_FOR_CONSUMER_REQUEST         = 8;
+    PUBLIC_KEY_FROM_CONSUMER_REQUEST            = 9;
+    CIPHER_TEXT_TO_BROKER_REQUEST               = 10;
+    CIPHER_TEXT_TO_CONSUMER_REQUEST             = 11;
+    CRYPTO_CONTEXT_FOR_SERVER_REQUEST           = 12;
+    PUBLIC_KEY_TO_SERVER_REQUEST                = 13;
+    REENCRYPTION_KEY_TO_SERVER_REQUEST          = 14;
+    PUBLIC_KEY_FROM_SERVER_REQUEST              = 15;
+}
+
+//===============================================================================
+service PreNetServer {
+    rpc CryptoContextFromServer(MessageRequest) returns (MessageReturn) {}
+
+    rpc PrivateKeyFromProducer(MessageRequest) returns (MessageReturn) {}
+    rpc PublicKeyFromClient(MessageRequest) returns (MessageReturn) {}
+
+    rpc CryptoContextRequestFromServer_Broker(MessageRequest) returns (MessageReturn) {}
+    rpc PublicKeyToBroker(MessageRequest) returns (MessageReturn) {}
+    rpc ReEncryptionKeyToBroker(MessageRequest) returns (MessageReturn) {}
+
+    rpc CryptoContextRequestFromServer_Server(MessageRequest) returns (MessageReturn) {}
+    rpc PublicKeyToServer(MessageRequest) returns (MessageReturn) {}
+    rpc ReEncryptionKeyToServer(MessageRequest) returns (MessageReturn) {}
+
+    rpc PublicKeyfromServer(MessageRequest) returns (MessageReturn) {}
+}
+
+service PreNetBroker {
+    rpc CipherTextFromProducer(MessageRequest) returns (MessageReturn) {}
+
+    rpc CipherTextToConsumer(MessageRequest) returns (MessageReturn) {}
+
+    rpc ReEncryptedCipherTextToBroker(MessageRequest) returns (MessageReturn) {}
+}
+
+message MessageRequest {
+    string client_name = 1;
+    string client_type = 2;
+    string upstream_client_name = 3;
+    string upstream_client_type = 4;
+    string channel_name = 5;
+
+    bytes pkey = 6;
+    bytes ctext = 7;
+}
+
+message MessageReturn {
+    string acknowledgement = 1;
+
+    bool keyAvailable = 2;
+    bool textAvailable = 3;
+    bool producerRegistered = 4;
+
+    bytes cryptocontext = 5;
+    bytes pkey = 6;
+    bytes reKey = 7;
+    bytes ciphertext = 8;
+}

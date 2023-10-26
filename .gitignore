@@ -1,32 +1,45 @@
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
+# Ignore everything in this directory
+*~
 *.o
-*.obj
+*.o.d
+*.gcov
+bin/
+build/
+cmake-build-debug
 
-# Precompiled Headers
-*.gch
-*.pch
+__pycache__
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+gmon.out
+## .gitattributes
+# Except this file
+!.gitignore
 
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
+.idea
+*/**/*.gch
 *.a
-*.lib
+*.class
 
-# Executables
-*.exe
-*.out
-*.app
+## for the moment
+.cproject
+.metadata/
+.project
+.settings/
+RemoteSystemTempFiles/
+.classpath
+.externalToolBuilders/
+/Default/
+
+.DS_Store
+
+# Ignore intellij project files/cmake files
+# CMakeLists.txt
+.idea/
+
+
+# vagrant output
+.vagrant/
+*.log
+
+
+# Visual Studio Code
+.vscode/*

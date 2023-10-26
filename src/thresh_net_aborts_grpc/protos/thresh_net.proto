@@ -1,0 +1,191 @@
+syntax = "proto3";
+
+package thresh_net;
+
+// tags identifing the requests
+enum RequestTag {
+    INVALID_REQUEST                                   = 0;
+    CRYPTO_CONTEXT_FOR_CLIENT_REQUEST                 = 1;
+    SECRET_SHARES_FROM_CLIENT_REQUEST                 = 2;
+    SECRET_SHARES_TO_CLIENT_REQUEST                   = 3;
+    PUBLIC_KEY_FROM_CLIENT_REQUEST                    = 4;
+    PUBLIC_KEY_TO_CLIENT_REQUEST                      = 5;
+    EVALMULT_KEY_FROM_CLIENT_REQUEST                  = 6;
+    EVALMULT_KEY_TO_CLIENT_REQUEST                    = 7;
+    EVALSUM_KEY_FROM_CLIENT_REQUEST                   = 8;
+    EVALSUM_KEY_TO_CLIENT_REQUEST                     = 9;
+    EVALMIXMULT_KEY_FROM_CLIENT_REQUEST               = 10;
+    EVALMIXMULT_KEY_TO_CLIENT_REQUEST                 = 11;
+    CIPHER_TEXT_FROM_CLIENT_REQUEST                   = 12;
+    CIPHER_TEXT_TO_CLIENT_REQUEST                     = 13;
+    PARTIAL_CIPHER_TEXT_FROM_CLIENT_REQUEST           = 14;
+    PARTIAL_CIPHER_TEXT_TO_CLIENT_REQUEST             = 15;
+    ABORTS_PARTIAL_CIPHER_TEXT_FROM_CLIENT_REQUEST    = 16;
+    ABORTS_PARTIAL_CIPHER_TEXT_TO_CLIENTS_REQUEST     = 17;
+    PARTIAL_CIPHER_TEXT_WAIT_FLAG_FROM_CLIENT_REQUEST = 18;
+    
+}
+
+//===============================================================================
+service ThreshServer {
+    rpc CryptoContextFromServer(CryptoContextRequest) returns (CryptoContextReturn) {}
+
+    rpc SecretSharesFromClient(SecretKeyShares) returns (SecretKeySharesAck) {}
+    rpc SecretSharesToClient(SecretKeySharesRequest) returns (SecretKeySharesReturn) {}
+
+    rpc PublicKeyFromClient(PublicKey) returns (PublicKeyAck) {}
+    rpc PublicKeyToClient(PublicKeyRequest) returns (PublicKeyReturn) {}
+
+    rpc evalMultKeyFromClient(EvalMultKey) returns (EvalMultKeyAck) {}
+    rpc evalMixMultKeyFromClient(EvalMultKey) returns (EvalMultKeyAck) {}
+    rpc evalMultKeyToClient(EvalMultKeyRequest) returns (EvalMultKeyReturn) {}
+    rpc evalMixMultKeyToClient(EvalMultKeyRequest) returns (EvalMultKeyReturn) {}
+
+    rpc evalSumKeyFromClient(EvalSumKey) returns (EvalSumKeyAck) {}
+    rpc evalSumKeyToClient(EvalSumKeyRequest) returns (EvalSumKeyReturn) {}
+
+    rpc CipherTextFromClient(CipherText) returns (CipherTextAck) {}
+    rpc CipherTextToClient(CipherTextRequest) returns (CipherTextReturn) {}
+
+    rpc PartialCipherTextFromClient(CipherText) returns (CipherTextAck) {}
+    rpc PartialCipherTextToClient (CipherTextRequest) returns (CipherTextReturn) {}
+
+    rpc PartialCipherTextsReceivedWait (PartialCTFlagRequest) returns (PartialCTFlagReturn) {}
+    rpc AbortsPartialCipherTextFromClient(AbortsCipherText) returns (AbortsCipherTextAck) {}
+    rpc AbortsPartialCipherTextToClients (AbortsCipherTextRequest) returns (AbortsCipherTextReturn) {}
+
+}
+
+message CryptoContextRequest {
+    // string dummy = 1;
+}
+
+message CryptoContextReturn {
+    bytes cryptocontext = 1;
+}
+
+message PublicKey {
+    bytes pkey = 1;
+    uint32 client_id = 2;
+}
+
+message PublicKeyAck {
+    string acknowledgement = 1;
+}
+
+message PublicKeyRequest {
+    uint32 client_id = 1;
+}
+
+message PublicKeyReturn {
+    bool  keyAvailable = 1;
+    bytes pKey        = 2;
+}
+
+message PartialCTFlagRequest {
+    uint32 client_id = 1;
+}
+
+message PartialCTFlagReturn {
+    bool  textavailable = 1;
+}
+
+
+message CipherText {
+    bytes ctext = 1;
+    uint32 client_id = 2;
+}
+
+message CipherTextAck {
+    string acknowledgement = 1;
+}
+
+message CipherTextRequest {
+    uint32 client_id = 1;
+}
+
+message CipherTextReturn {
+    bool  textAvailable = 1;
+    bytes ciphertext    = 2;
+}
+
+message AbortsCipherText {
+    bytes ctext = 1;
+    uint32 received_client_id = 2;
+    uint32 recovered_client_id = 3;
+}
+
+message AbortsCipherTextAck {
+    string acknowledgement = 1;
+}
+
+message AbortsCipherTextRequest {
+    uint32 received_client_id = 1;
+    uint32 recovered_client_id = 2;
+}
+
+message AbortsCipherTextReturn {
+    bool  textAvailable = 1;
+    bytes ciphertext    = 2;
+}
+
+message EvalMultKey {
+    bytes ekey = 1;
+    uint32 client_id = 2;
+    //uint32 round = 3;
+}
+
+message EvalMultKeyAck {
+    string acknowledgement = 1;
+}
+
+message EvalSumKey {
+    bytes ekey = 1;
+    uint32 client_id = 2;
+    uint32 index = 3;
+}
+
+message EvalSumKeyAck {
+    string acknowledgement = 1;
+}
+
+message EvalMultKeyRequest {
+    uint32 client_id = 1;
+    //uint32 round = 2;
+}
+
+message EvalMultKeyReturn {
+    bool  keyAvailable = 1;
+    bytes eKey        = 2;
+}
+
+message EvalSumKeyRequest {
+    uint32 client_id = 1;
+    uint32 index = 2;
+}
+
+message EvalSumKeyReturn {
+    bool  keyAvailable = 1;
+    bytes eKey        = 2;
+}
+
+message SecretKeyShares {
+    bytes secretshares = 1;
+    uint32 client_id = 2;
+}
+
+message SecretKeySharesAck {
+    string acknowledgement = 1;
+}
+
+message SecretKeySharesRequest {
+    uint32 requesting_client_id = 1;
+    uint32 recover_client_id = 2;
+    uint32 threshold = 3;
+    uint32 num_of_parties = 4;
+}
+
+message SecretKeySharesReturn {
+    bool  sharesAvailable = 1;
+    bytes secretshares = 2;
+}

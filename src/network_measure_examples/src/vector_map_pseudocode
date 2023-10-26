@@ -1,0 +1,221 @@
+// this is pseudocode
+
+
+#include <map>
+#include <iterator>
+
+
+
+//define the container for the mapping 
+std::map<std::string, std::pair<int,int>> map2vector;
+
+
+//build the mapping this is unique for each example:
+// here we are building 4 virtual vector registers.
+unsigned int n_nodes = 256;   //for this example 
+
+ringsize = 2048 ; //you have to get this from the crypto parameters
+n_elements = ringsize; //bg
+n_elements = ringsize/2; //ckks
+ 
+
+
+unsigned int offset = 0;
+unsigned int length = n_nodes;
+map2vector.insert(std::pair<"x", std::pair<offset, length> >);
+
+
+//use the same length for the next two vectors
+map2vector.insert(std::pair<"x2", std::pair<offset, length> >);
+offset = offset + length;
+
+map2vector.insert(std::pair<"x3", std::pair<offset, length> >);
+offset = offset + length;
+
+//now make the next vector just be length 1
+length = 1;
+map2vector.insert(std::pair<"n", std::pair<offset, length> >);
+
+offset = offset + length;
+
+// verify that the overall storage still fits in ringsize. 
+
+if (offset > n_elements) {
+  exit();
+ }
+
+//the map is defined.
+
+//show how to use it
+
+
+
+// assume I am node 3. so I will write to index 3  of vectors x, x2, x3
+
+my_ix = 3;
+x= 2.4;
+x2 = x*x;
+x3 = x*x*x;
+write("x",x,3);    //write to the three variables
+write("x2",x2,3);
+write("x3",x2,3);
+add("n",1.0, 0);    //increment the counter
+
+//helper function
+int get_offset(std::string name, int index){
+
+  
+  auto itr = map2vector.find(name);  //note map2vector is either global or passed in
+
+  if (itr == map2vector.end()){
+	cerr<<"cannot find register named "+name <<endl;
+	return -1;
+  }
+
+  //itr points to the offest and length
+  offset = itr->first;
+  length = itr->second;
+  
+  if (index>=length){ //verify you are not writing past the end of the virtual register. 
+	cerr<<"trying to write past end of register named "+name <<endl;
+	return -1;
+  }
+  
+}
+
+// code for write
+
+
+void write(std::string name, float val, int index){
+
+  vector<float> invec= {0.0}; // start with a zero vector
+
+  //note for ckks this may need to be complex, not sure how the API works nowdays
+  offset = get_offset(name, index);
+
+  if (offset == -1){
+	error();
+  }  
+  // ok it is safe to write
+  invec[offset+index] = val;
+
+  //encode th plaintext as a packed vector
+  ptvec = encodeblahblah(invec)
+	
+	//add it to the ciphertext
+	EvalAdd(input_ct, ptvex)  //note you have to make input_ct global or pass it in to the function.
+	
+
+	return;
+}
+
+
+// code for mul
+
+void mul(std::string name, float val, int index){
+
+  vector<float> invec= {1.0}; // start with a ones  vector
+
+  //note for ckks this may need to be complex, not sure how the API works nowdays
+  offset = get_offset(name, index);
+
+  if (offset == -1){
+	error();
+  }  
+  // ok it is safe to write
+  invec[offset+index] = val;
+
+  //encode th plaintext as a packed vector
+  ptvec = encodeblahblah(invec)
+	
+	//add it to the ciphertext
+	EvalMul(input_ct, ptvex)  //note you have to make input_ct global or pass it in to the function.
+	
+
+	return;
+}
+
+//function for add
+ void add(std::string name, float val, int index){
+   write(name, val, index);
+ }
+
+ void sub(std::string name, float val, int index){
+   write(name, -val, index);
+ }
+
+
+//function owrite
+ void owrite(std::string name, float val, int index){
+   mul(name, 0.0, index);
+   add(name, val, index);
+
+ }
+
+
+// now on the controller you need to eventually unpack that data to process it
+
+
+
+//function unpack CT
+map<string,vector<float>> unpackCT(vector<float> pt){
+  //this function unpacks the vectors in the pt.
+
+  map<string,vector<float>> outmap;
+  
+  //loop over all the items in map2vector
+  for (auto itr = map2vector.begin(); itr != map2vector.end(); ++itr) {
+	name = itr->first;
+	auto olpair = itr->second;
+
+	int offset = olpair->first;
+	int length = olpair->second;
+
+	vector <float> tmp = {pt.begin() + offset, pt.begin() + offset + length};
+	// note tmp should be of size() == length
+	outmap.insert(std::pair<name, tmp>);
+  }
+  
+  
+  return outmap;
+}
+
+
+// so now if the controller were to calculate
+
+map<string,vector<float>> unpacked_vectors;
+
+unpacked_vectors = unpackPT(ptvec); //pt is the plaintext vector that was decrypted and unpacked
+
+auto x = unpacked_vectors.find("x");
+auto x2 = unpacked_vectors.find("x2");
+auto x3 = unpacked_vectors.find("x3");
+auto n = unpacked_vectors.find("n");
+
+n_el = n[0];
+
+sum_x = 0.0;
+for(auto& v : x){
+  sum_x += v;
+ }
+ave_x = sum_x / n_el;
+
+sum_x2 = 0.0;
+for(auto& v : x2){
+  sum_x2 += v;
+ }
+ave_x2 = sum_x2 / n_el;
+
+sum_x3 = 0.0;
+for(auto& v : x3){
+  sum_x3 += v;
+ }
+ave_x3 = sum_x3 / n_el;
+
+cout <<" ave_x: "<< ave_x
+     <<" ave_x1: "<< ave_x1
+     <<" ave_x2: "<< ave_x2
+     <<" with " << n_el << " elements total"   << endl;
+
+
+

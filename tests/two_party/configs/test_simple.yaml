@@ -1,0 +1,2 @@
+binary_location: "bin/two_party_test_simple"
+test_location: "verifiers/two_party_test_simple"

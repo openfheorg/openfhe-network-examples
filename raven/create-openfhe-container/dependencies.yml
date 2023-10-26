@@ -1,0 +1,54 @@
+- hosts: [all]
+  tasks:
+    - name: apt update
+      shell: sudo apt update
+      become: yes
+
+    - name: install code prerequisites
+      apt:
+        name:
+          - tmux
+          - wget
+        state: present
+        update_cache: yes
+      become: yes
+
+    - name: install docker
+      shell: wget -qO- https://get.docker.com | bash
+
+    - name: add docker to user
+      shell: usermod -aG docker rvn
+      become: yes
+      ignore_errors: yes
+
+    - name: build base container
+      shell: /palisades/build-base.sh
+      become: yes
+
+    - name: build minimal library container
+      shell: /palisades/move-to-min-container.sh
+      become: yes
+
+    - name: build example container
+      shell: /palisades/build-examples.sh
+      become: yes
+
+    - name: build minimal examples container
+      shell: /palisades/move-to-bin-container.sh
+      become: yes
+
+    - name: save the base builder image
+      shell: sudo docker save -o /palisades/base.tar palisades-base-builder:latest
+      become: yes
+
+    - name: save the minimal base image
+      shell: sudo docker save -o /palisades/base-min.tar palisades-library:jammy
+      become: yes
+
+    - name: save the example builder image
+      shell: sudo docker save -o /palisades/examples.tar palisades-examples-builder:latest
+      become: yes
+
+    - name: save the minimal example image
+      shell: sudo docker save -o /palisades/examples-min.tar palisades-examples:jammy
+      become: yes

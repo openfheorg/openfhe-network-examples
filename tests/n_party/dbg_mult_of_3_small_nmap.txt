@@ -1,0 +1,6 @@
+Server-Client1@localhost:50052,Client2@localhost:50053,Client3@localhost:50054,Client4@localhost:50055,Client5@localhost:50056
+Client1-Server@localhost:50051,Client2@localhost:50053,Client3@localhost:50054,Client4@localhost:50055,Client5@localhost:50056
+Client2-Server@localhost:50051,Client1@localhost:50052,Client3@localhost:50054,Client4@localhost:50055,Client5@localhost:50056
+Client3-Server@localhost:50051,Client1@localhost:50052,Client2@localhost:50053,Client4@localhost:50055,Client5@localhost:50056
+Client4-Server@localhost:50051,Client1@localhost:50052,Client2@localhost:50053,Client3@localhost:50054,Client5@localhost:50056
+Client5-Server@localhost:50051,Client1@localhost:50052,Client2@localhost:50053,Client3@localhost:50054,Client4@localhost:50055

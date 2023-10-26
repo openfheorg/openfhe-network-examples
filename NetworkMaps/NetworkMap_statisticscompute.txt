@@ -1,0 +1,4 @@
+Node1-Node2@localhost:50052,Controller@localhost:50054
+Node2-Node1@localhost:50051,Node3@localhost:50053,Controller@localhost:50054
+Node3-Node2@localhost:50052,Controller@localhost:50054
+Controller-Node1@localhost:50051,Node2@localhost:50052,Node3@localhost:50053
