@@ -192,5 +192,8 @@ tmux kill-server
 rm $producer_key_file $consumer_1_key_file $consumer_2_key_file
 rm $Video_encrypted $Video_decrypted
 
+#cleanup text fies
+rm -f broker_*.txt client_*.txt server_*.txt Sender_*.txt
+
 #put terminal back into a good state. 
 reset

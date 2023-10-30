@@ -164,6 +164,19 @@ among the nodes where the data is accumulated along a path of nodes.
 
 Here are instructions for building each of the examples. 
 
+## Building Examples with gRPC
+
+Several examples use gRPC as their interprocess communications
+system. They require gRPC and Google protobufs to be installed on your
+system.  Based on suggestions from Google's documentation, we
+recommend installing gRPC locally if it is not pre-installed in your
+system.
+
+Detailed instructions for this can be found in the file
+`Installing_gRPC.md` located in the root directory. Please refer to
+those and isntall gRPC on your system before proceeding to the
+remainder of the build instrutions below.
+
 ## Build instructions for Ubuntu
 
 Please note that we have not tried installing and running these
@@ -218,13 +231,19 @@ automatically find the installed libraries and include files:
    built with PALISADE and have been updated to work with OpenFHE.
 
    > `cd build`
+   
+   If you have not added them to your `$PATH` environement variable,
+   specify the directories where you have installed `gRPC` an
+   `Protobufs` to the `cmake` command. For example if I installed it in `/home/thisuser/opt/grpc` then you need to run this as:
+   
+  > ` cmake  -DProtobuf_DIR=/home/thisuser/opt/grpc/lib/cmake/protobuf -DgRPC_DIR=/home/thisuser/opt/grpc/lib/cmake/grpc ..`
 
 	Note if you used a different install directory for OpenFHE (for
-    example if I installed it in `/home/thisuser/opt` then you need to
+    example if I installed it in `/home/thisuser/opt/OpenFHE` then you need to
     run this as 
 	
-	> `cmake -DCMAKE_INSTALL_PREFIX=/home/thisuser/opt ..`
-	
+	> `cmake -DCMAKE_INSTALL_PREFIX=/home/palisade/opt/openfhe64_1_1_1/ -DProtobuf_DIR=/home/palisade/opt/grpc/lib/cmake/protobuf -DgRPC_DIR=/home/palisade/opt/grpc/lib/cmake/grpc ..`
+
 	Note: If you have multiple versions (revisions) of OpenFHE on
     your system, `cmake` may find the wrong one and cause build errors
     (`cmake` uses an elaborate set of search rules to find a library,
@@ -239,25 +258,15 @@ automatically find the installed libraries and include files:
    > `make`
 
 	Executables for all the examples will be in the `build/bin`
-    directory.
+    directory. If you have a multicore system `make -j` will speed up
+    the build process.
 
-
-## Building Examples with gRPC
-
-Several examples use gRPC as their interprocess communications
-system. They require gRPC and Google protobufs to be installed on your
-system.  Based on suggestions from Google's documentation, we
-recommend installing gRPC locally if it is not pre-installed in your
-system.
-
-Detailed instructions for this can be found in the file
-`Installing_gRPC.md` located in the root directory.
 
 ## Certificate setup for GRPC communications
 
 GRPC allows to enable communications with `ssl` if needed. When `ssl`
 is enabled, the nodes use certificates to authenticate each other. A
-test certificate setup is done for the examples using the scripts in
+test certificate setup is provided for the examples using the scripts in
 authentication folder. Each example built with GRPC has a folder in
 the authentication folder and lists the nodes needed for the example
 in the `nodes` file.
@@ -323,15 +332,20 @@ The demo requires additional third party applications to be installed:
 
 To run the demo, build the example by following instructions under "Building"
 
+1. copy the `demoData` directory found in the root directory and it's
+   contents to the `build` directory
+   
+   >`cp -rf demoData build`
 
-1. open a new terminal window, expand it to a large size,  and type
+1. open a new terminal window in the `build\bindirectory, expand it to a
+   large size, and type
 
 > `tmux`
 
 to open the multiple terminal windows that will show the various
    component printouts.
    
-1. In another window cd to the root directory of this repo and type
+1. In another window cd to the `build` directory of this repo and type
 
    > `../demos/demoscript_pre_grpc_tmux.sh`
 
@@ -371,6 +385,10 @@ sequentially with built in pauses. It can also run interactively by
 adding a second parameter after the script command:
 
 > `../demos/demoscript_pre_grpc_tmux.sh interactive`
+
+If you see an error `Cannot load libcuda.so.1` you can ignore it. It is from the `mpv` video display program.
+
+
 
 The example demo can also be run manually in multiple terminals. The
 following flags apply to the different processes `pre_server_demo`,
