@@ -340,7 +340,13 @@ int main(int argc, char *argv[]) {
       reEncryptedCT = cryptoContext->ReEncrypt(reEncryptedCTs[i], reencryptionKey, keyPairs[i].publicKey); //fixed bits noise HRA secure
       reencdiff = TOC_US(t);
     } else if ((security_model == 2) || (security_model == 3)) {
-      std::cout << "Provable HRA secure PRE" << std::endl;
+      std::cout << "Provable HRA secure PRE";
+	  if (security_model == 2) {
+		std::cout << " BV Key switching";
+	  } else {
+		std::cout << " Hybrid Key switching";
+	  }
+	  std::cout << std::endl;
       TIC(t);
       reEncryptedCT1 = cryptoContext->ReEncrypt(reEncryptedCTs[i], reencryptionKey, keyPairs[i].publicKey); //HRA secure noiseflooding
       reEncryptedCT = cryptoContext->ModReduce(reEncryptedCT1); //mod reduction for noise flooding

@@ -507,6 +507,13 @@ the build folder) is passed as a command line argument to the server
 and the client targets to establish a secure channel for
 communication.
 
+Remember to generate certificates for these demos:
+
+> `sh ../scripts/authentication/create_nodes_cert.sh threshnet_aborts`
+
+And to run the various components (manually) in different windows in
+the `build` directory.
+
 Running the Server: 
 
 > `bin/thresh_server -n KS -i localhost -p 12345 -l <certificate-location>`
@@ -552,24 +559,22 @@ The correct output for this example would be
 
 ```
 Resulting Fused Mult Plaintext: 
-( 1 16 81 256 625 1296 2401 4096 6561 10000 14641 24 ... )
+( 1 16 81 256 81 16 1 16 256 81 81 24 ... )
 
  Resulting Fused AddPlaintext: 
-( 4 8 12 16 20 24 28 32 36 40 44 10 ... )
+( 4 8 12 16 12 8 4 8 16 12 12 10 ... )
+
 ```
+
+Remember to delete the intermediate files generated with 
+
+	> `rm -f server_*.txt client_*.txt`
 
 The Threshnet example also allows to run the aborts protocol when one
 or more of parties (minority) drops off before decryption. To test
-this, we can use the -a flag to manually drop off parties. Suppose
+this, we can use the `-a 1` flag to manually drop off parties. Suppose
 there are three clients running, one party can drop off and the other
-parties can still complete the distributed decryption process as
-follows
-
->`bin/thresh_client -n alice -p 12345 -i localhost -d 1 -l . -m 4 -c multiply`
-
->`bin/thresh_client -n bob -p 12345 -i localhost -d 2 -l . -m 4 -a 1 -c multiply`
-
->`bin/thresh_client -n carol -p 12345 -i localhost -d 3 -l . -m 4 -c multiply`
+parties can still complete the distributed decryption process. 
 
 The demoscript runs five clients with and without aborts based on
 setting the variable aborts in the script to 1 and 0 respectively. The
