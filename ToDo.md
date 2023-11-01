@@ -7,9 +7,22 @@ PRE
 `demoscript_pre_grpc_tmux.sh` 
 
 [x] verify operation and update README.md if needed.
+
+ used to work, does not now. regnerated certs, doing the regeneration again. 
+ 
+
 [ ] should not report on failure of aes decrypt if other code fails. 
-[ ] add checks for certs, an report if not there. 
-[ ] add checks for demoData directory and report if not there. 
+
+hard to do as the script is what is checking
+maybe reorder the video generation and delete the encrypted decrypted files or rename them bob_decrypt etc. 
+
+
+[x ] add checks for certs, an report if not there. 
+
+[x ] add checks for demoData directory and report if not there. 
+
+[ ] speed up demo waits.
+
 
 [ ] verify the two cases using different terminals. 
 
@@ -28,16 +41,20 @@ PRE
 	cant run till 5 window version works
 
 `bin/pre`
+
  [x] verify operation and update README.md if needed.
+ 
  [x] change output to report full name of security mode 
  
- Threshold with aborts
- =
+Threshold with aborts
+=
  
- [x ] run five window example
-     had to change output to correct form. 
+[x] run five window example
+
+    had to change output to correct form. 
 
 [x] run four window example with abort 
+
     I do not think this example works as written in multiple windows 
 	removed the examle as the example from the readme file
  
@@ -48,12 +65,18 @@ PRE
 
 does not work, some clients fail to connect try differnt port 50050 worked
 
-[ ] need to add aborts as an input parameter to demo script it is true/fase
-[ ] need to add abprts to the utils.cpp parameter documentation and updat readme and to announce abort in the code. 
+[ ] need to add aborts as an input parameter to demo script it is true/false
+
+[x] need to add abprts to the utils.cpp parameter documentation and updat readme and to announce abort in the code. 
 
 `demoscript_fhe_aborts_grpc_taskset.sh`
 
-[ ] This is not documented anywhere verify operation and update README.md if needed.
+[x ] This is not documented anywhere verify operation and update README.md if needed.
+
+does the same as tmux except uses taskset. need to have a function
+that limits the # processors to those available.  or just keep it.
+	
+Renamed to `demoscript_threshnet_grpc_tmux.sh and demoscript_threshnet_grpc_tmux.sh`
 
 Adjacent Co-Measurement
 ===

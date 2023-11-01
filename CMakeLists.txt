@@ -43,12 +43,12 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g")
 
 ### ADD YOUR EXECUTABLE(s) HERE
 add_subDirectory(src/pre_grpc_demo)
-add_subDirectory(src/thresh_net_adjacent_measure)
 add_subDirectory(src/peer_to_peer_framework)
-add_subDirectory(src/network_measure_examples)
-add_subDirectory(src/thresh_net_aborts_grpc)
-add_subDirectory(src/thresh_net_aborts)
+add_subDirectory(src/threshold_fhe_aborts)
+add_subDirectory(src/threshnet_aborts_grpc)
 add_subDirectory(src/threshnet_aborts_p2p_demo)
+add_subDirectory(src/thresh_net_adjacent_measure)
+add_subDirectory(src/network_measure_examples)
 option(BUILD_UNITTESTS "Set OFF to prevent building the unit tests" OFF)
 message(STATUS "BUILD_TESTS:  ${BUILD_UNITTESTS}")
 ### Our tests

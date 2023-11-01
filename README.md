@@ -124,21 +124,22 @@ code.
 
 There are a few different versions of this example: 
 
-* `src/thresh_net_aborts` is a single file implementation used for
-  benchmarking the core crypto operations without any socket
-  communications.
-
-* `src/thresh_net_aborts_grpc` is a client-server version.
+* `src/threshold_fhe_aborts` contains single file implementations used
+  for benchmarking the core crypto operations without any socket
+  communications. The file `threshold_fhe.cpp` runs without testing
+  aborts, and `threshold_fhe_aborts.cpp` tests the abort recovery system.
+  
+* `src/threshnet_aborts_grpc` is a client-server version.
 
 * `src/threshnet_aborts_p2p_demo` is a peer-to-peer version. 
 
 Both client-server and peer-to-peer use GRPC for secure socket
-communications, but are coded in a completely different manner. As client 
+communications, but are coded in a completely different manner. 
 
 All these examples implement multiparty a threshold FHE computation
 service using gRPC.  Demo scripts to run a threshold example with 5
 parties in both client-server and peer-to-peer settings are in the
-`demos` folder. Additional files for running the examples with 3 and 7
+`demos` folder (see below). Additional files for running the examples with 3 and 7
 parties can be found in the `benchmarks` folder.
 
 ## Network Adjacent Co-Measurement Client-Server Example
@@ -288,6 +289,9 @@ line with the `-n` flag. Remove the node folders, `*.crt` and `*.key` files
 in the build directory after running each example to be sure there is
 no overlap of nodes between examples.
 
+Please look at the `scripts/authentication` directory to determine the
+appropriate directory names to use.
+
 # Running The Examples
 
 Before running the examples, copy the `demoData` folder into the build
@@ -410,7 +414,7 @@ To run the example with two brokers where consumer\_1 is connected to
 broker\_2, broker\_2 is connected to broker\_1 and producer is connected
 to broker\_1, so the channel from consumer\_1 to producer alice is
 
-> "alice -> broker\_1 -> broker\_2 -> consumer\_1".
+> `alice -> broker\_1 -> broker\_2 -> consumer\_1`
 
 > `bin/pre_server_demo -n KS_1 -k localhost:50051 -a demoData/accessMaps/pre_accessmap -l .`
 
@@ -468,7 +472,7 @@ can be run again and again.
 
 A single thread implementation that emulates multiple hops for four
 different security options can be run using the target `bin/pre`. The
-target `bin/pre` has reliable timing using high_resolution_clock. This
+target `bin/pre` has reliable timing using high\_resolution\_clock. This
 can be used to verify correct functionality for new parameters sets
 without having to launch 100's of brokers in different terminals.
 
@@ -480,6 +484,7 @@ secure parameters and 1 hop by default.
 To set the security mode use the flag
 
 `-m #`
+
 where
 
 0 = CPA secure PRE,
@@ -524,6 +529,8 @@ Running the clients:
 
 the -d flag specifies the client id (an integer from 1 to
 total\_num\_of\_parties , 
+
+-a 1 specifies to abort this node partway through the run.
 
 -l specifies the certificate location, 
 
@@ -583,7 +590,14 @@ variable operation in the script can be set to 'add', 'multiply' or
 corresponding operation. Once the variables are set in the script as
 required, the script can be run as
 
->`../demos/demoscript_fhe_aborts_grpc_tmux.sh`
+>`../demos/demoscript_threshnet_grpc_tmux.sh`
+
+There is also a version that runs each party on a separate node (for
+more accurate timing) using `taskset`:
+
+>`../demos/demoscript_threshnet_grpc_tmux_taskset.sh`
+
+However you computer needs to have at least 6 logical cpus to run the script.
 
 ## Threshhold Network Measurement protocol using Client-Server Google RPC (gRPC)
 

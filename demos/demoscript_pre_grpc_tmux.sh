@@ -19,7 +19,24 @@ producer_key_file=demoData/keys/producer_aes_key_alice
 consumer_1_key_file=demoData/keys/consumer_aes_key_alice-consumer_1
 consumer_2_key_file=demoData/keys/consumer_aes_key_alice-charlie
 
+#verify demoDirectory exists
+if [[ ! -d demoData ]]
+then
+	echo "directory demoData not found. Please `cp -r demoData` from root directory into this directory"
+	exit -1
+fi
+
 ssl_cert_path="."
+
+for certdir in KS_1 KS_2 broker_1 broker_2 broker_3 broker_4 B1 B2 alice consumer_1 consumer_2 charlie
+do
+	if [[ ! -d "${ssl_cert_path}/${certdir}" ]]
+	then
+		echo "Certificate directory ${ssl_cert_path}/${certdir} not found, please run certificate generation script for pre_grpc_demo"
+		exit -1
+	fi
+done	
+
 
 display_offset_0="480x260+5%+14%"   # Will need to be adjusted for target resolution
 display_offset_1="480x260+13%+36%"  # Maybe switching to %-based targets to make portable

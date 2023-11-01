@@ -9,8 +9,12 @@ else
 	echo "Running in non-interactive mode"
 fi
 
+#uncomment to use ssh
 #ssl_cert_path="-l ."
+#uncomment to turn off ssh
 ssl_cert_path="-Wssloff"
+
+#set operation
 operation="vectorsum"
 num_of_clients=5
 
@@ -71,7 +75,7 @@ if [[ $aborts -ne 1 ]]
 then
 	tmux send 'bin/thresh_client -n client3 -p 50050 -i localhost -d 3 -m 5 -c '$operation' '$ssl_cert_path ENTER
 else
-	tmux send 'bin/thresh_client -n client3 -p 50050 -i localhost -d 3 -m 5 -a 1 -c '$operation' '$ssl_cert_path ENTER
+	tmux send 'bin/thresh_client -n client3 -p 50050 -i localhost -d 3 -m 5 -a -c '$operation' '$ssl_cert_path ENTER
 fi
 
 sleep 1
@@ -86,7 +90,7 @@ if [[ $aborts -ne 1 ]]
 then
 	tmux send 'bin/thresh_client -n client5 -p 50050 -i localhost -d 5 -m 5 -c '$operation' '$ssl_cert_path ENTER
 else
-	tmux send 'bin/thresh_client -n client5 -p 50050 -i localhost -d 5 -m 5 -a 1 -c '$operation' '$ssl_cert_path ENTER
+	tmux send 'bin/thresh_client -n client5 -p 50050 -i localhost -d 5 -m 5 -a -c '$operation' '$ssl_cert_path ENTER
 fi
 
 sleep 1

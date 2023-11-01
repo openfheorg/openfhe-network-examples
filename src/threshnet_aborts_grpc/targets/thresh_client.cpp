@@ -542,6 +542,7 @@ int main(int argc, char** argv) {
 	std::cout << "Number of ciphertexts: " << CipherTexts.size() << std::endl;
 
 	if (aborts == 1) {
+	  std::cout << "This client is Aborting the protocol and exiting." <<std::endl;
 	  exit(EXIT_FAILURE);
 	}
 
@@ -668,7 +669,7 @@ int main(int argc, char** argv) {
 
 						} else {
 
-						std::cout << "\n Wait for "<< compute_operation <<" aborts partial CipherText result of client " << i << "from client " << recovering_client_id << std::endl;	
+						std::cout << "\n Wait for "<< compute_operation <<" aborts partial CipherText result of client " << i << " from client " << recovering_client_id << std::endl;	
 						while (!threshClient.AbortsPartialCipherTextToClients(serializedPartialCipherText, recovering_client_id, i)) {
 							std::cout << "." << std::flush;
 							std::this_thread::sleep_for(std::chrono::milliseconds(ABORTS_SLEEP_TIME_MSECS));

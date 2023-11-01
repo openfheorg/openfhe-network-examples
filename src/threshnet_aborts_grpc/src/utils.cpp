@@ -13,7 +13,7 @@ bool processInputParams(int argc,  char* const argv[], Params& outParams, const 
         {"client_id",            required_argument, NULL, 'd'},
         {"Num_of_parties",       required_argument, NULL, 'm'},
 		{"process_name",         required_argument, NULL, 'n'},
-        {"aborts"      ,         required_argument, NULL, 'a'},
+        {"aborts"      ,         no_argument,       NULL, 'a'},
         {"compute"     ,         optional_argument, NULL, 'c'},
         {"no-argument options",  no_argument,       NULL, 'W'},
         {"help",                 no_argument,       NULL, 'h'},
@@ -22,6 +22,7 @@ bool processInputParams(int argc,  char* const argv[], Params& outParams, const 
 
     char opt(0);
     std::cout << "cmdline arguments " << optstring <<std::endl;
+	outParams.aborts = "0";
     while ((opt = getopt_long(argc, argv, optstring, long_options, NULL)) != -1) {
         std::cerr << "opt1: " << opt << "; optarg: " << optarg << std::endl;
         switch (opt) {
@@ -41,7 +42,7 @@ bool processInputParams(int argc,  char* const argv[], Params& outParams, const 
             outParams.process_name = optarg;
             break;
         case 'a':
-            outParams.aborts = optarg;
+            outParams.aborts = "1";
             break;
         case 'c':
             outParams.computation = optarg;
@@ -115,6 +116,7 @@ void usage(const char* task) {
         << "        [-n name of this process: server1, client2, consumer3, producer1, etc.] " << std::endl
         << "        [-W no-argument options: " << std::endl
         << "            -Wssloff - run task without SSL authentication] " << std::endl
+        << "        [-a abort ths party during protocol]"  << std::endl 
         << "        -h prints this message" << std::endl;
 }
 

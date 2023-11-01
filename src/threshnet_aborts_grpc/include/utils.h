@@ -58,7 +58,7 @@ struct Params {
     Params() : disableSSLAuthentication(false) {}
 };
 
-bool processInputParams(int argc, char* const argv[], Params& params, const char* optstring = "i:p:l:d:m:n:a:c:W:h");
+bool processInputParams(int argc, char* const argv[], Params& params, const char* optstring = "i:p:l:d:m:n:ac:W:h");
 void usage(const char* task);
 
 
