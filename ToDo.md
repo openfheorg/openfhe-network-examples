@@ -11,18 +11,13 @@ PRE
  used to work, does not now. regnerated certs, doing the regeneration again. 
  
 
-[ ] should not report on failure of aes decrypt if other code fails. 
-
-hard to do as the script is what is checking
-maybe reorder the video generation and delete the encrypted decrypted files or rename them bob_decrypt etc. 
-
+[x] should not report on failure of aes decrypt if other code fails. 
 
 [x ] add checks for certs, an report if not there. 
 
 [x ] add checks for demoData directory and report if not there. 
 
-[ ] speed up demo waits.
-
+[x ] speed up demo waits.
 
 [ ] verify the two cases using different terminals. 
 
@@ -35,6 +30,19 @@ maybe reorder the video generation and delete the encrypted decrypted files or r
 	with 
 	
 	/home/palisade/Documents/openfhe/main/src/pke/lib/scheme/bgvrns/bgvrns-parametergeneration.cpp:70 The specified ring dimension (1024) does not comply with HE standards recommendation (4096).
+	
+	
+	runs for -m INDCPA
+	so we make -m manditory that was the issue.
+	
+	
+	now alice cannot find key
+	
+Server's acknowledgement: Received PKEY. Thank you, Your Server]
+Server's acknowledgement public key: Received PKEY. Thank you, Your Server]
+Unable to open key file
+
+STOPPED HERE
 
 [ ] manually run pre_server_demo with 8 windows
 
@@ -103,10 +111,6 @@ P2P
 
 [ ] This is not documented anywhere verify operation and update README.md if needed.
 
-
-STOPPED HERE
-
-
 `demoscript_p2p_adjacent_network_measure_diff.sh`
 
 [ ] verify operation and update README.md if needed.
@@ -120,6 +124,9 @@ STOPPED HERE
 
 [ ] verify operation and update README.md if needed.
 
+
+test code? 
+--
 
 `demoscript_p2p_testbroadcast.sh`
 

@@ -70,7 +70,11 @@ bool processInputParams(int argc,  char* const argv[], Params& outParams, const 
             return false;
         }
     }
-
+	if (outParams.security_model == "" ) {
+	  std::cerr << "error: security model is required option" << std::endl;
+	  return false;
+    }
+  
     if (!outParams.key_server_socket_address.size()) {
         std::cerr << "error: port number is a required option" << std::endl;
         return false;

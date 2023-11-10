@@ -407,7 +407,7 @@ following flags apply to the different processes `pre_server_demo`,
    -s upstream_server_name
    -a access_map_file
    -c channel_name (producer_name-consumer_name)
-   -m security_mode (INDCPA, FIXED_NOISE_HRA, NOISE_FLOODING_HRA, NOISE_FLOODING_HRA_HYBRID)
+   -m security_mode (INDCPA, FIXED_NOISE_HRA, NOISE_FLOODING_HRA, NOISE_FLOODING_HRA_HYBRID) [required]
 ```
 
 To run the example with two brokers where consumer\_1 is connected to
@@ -416,15 +416,15 @@ to broker\_1, so the channel from consumer\_1 to producer alice is
 
 > `alice -> broker\_1 -> broker\_2 -> consumer\_1`
 
-> `bin/pre_server_demo -n KS_1 -k localhost:50051 -a demoData/accessMaps/pre_accessmap -l .`
+> `bin/pre_server_demo -n KS_1 -k localhost:50051 -a demoData/accessMaps/pre_accessmap -m INDCPA -l .`
 
-> `bin/pre_broker_demo -n broker_1 -k localhost:50051 -d localhost:50052 -l .`
+> `bin/pre_broker_demo -n broker_1 -k localhost:50051 -d localhost:50052  -m INDCPA -l .`
 
-> `bin/pre_broker_demo -n broker_2 -k localhost:50051 -u localhost:50052 -i broker_1 -d localhost:50053 -l .`
+> `bin/pre_broker_demo -n broker_2 -k localhost:50051 -u localhost:50052 -m INDCPA -i broker_1 -d localhost:50053 -l .`
 
-> `bin/pre_producer_demo -n alice -k localhost:50051 -d localhost:50052 -l .`
+> `bin/pre_producer_demo -n alice -k localhost:50051 -d localhost:50052 -m INDCPA -l .`
 
-> `bin/pre_consumer_demo -n consumer_1 -k localhost:50051 -u localhost:50053 -i broker_2 -c alice-consumer_1 -l .`
+> `bin/pre_consumer_demo -n consumer_1 -k localhost:50051 -u localhost:50053 -m INDCPA -i broker_2 -c alice-consumer_1 -l .`
 
 The demo can also be run across multiple trust zones (multiple key
 servers) with multiple brokers for each zone. To run an example with

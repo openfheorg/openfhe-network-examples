@@ -37,6 +37,9 @@ do
 	fi
 done	
 
+#clean up from previous runs
+rm -f $Video_Encrypted $Video_Decrypted
+
 
 display_offset_0="480x260+5%+14%"   # Will need to be adjusted for target resolution
 display_offset_1="480x260+13%+36%"  # Maybe switching to %-based targets to make portable
@@ -83,12 +86,12 @@ tmux split-window -v
 tmux select-pane -t 2
 tmux select-pane -T 'Broker 1'
 
-sleep 5
+sleep 1
 
 tmux split-window -v
 tmux select-pane -T 'Broker 2'
 
-sleep 4
+sleep 1
 #tmux select-pane -t 4
 
 # Reorganize panes
@@ -115,23 +118,23 @@ tmux select-pane -T 'Consumer 1(valid key)'
 tmux select-pane -t 7
 tmux select-pane -T 'Consumer 2(invalid key)'
 
-sleep 5
+sleep 1
 tmux select-pane -t 2
 printf "Starting server\n"
 tmux send 'bin/pre_server_demo -n KS_1 -k localhost:50050 -a demoData/accessMaps/pre_accessmap -m '$security_model' -l '$ssl_cert_path ENTER
 
-sleep 3
+sleep 1
 tmux select-pane -t 5
 printf "Starting broker 1\n"
 tmux send 'bin/pre_broker_demo -n B1 -k localhost:50050 -d localhost:50051 -m '$security_model' -l '$ssl_cert_path ENTER
 
-sleep 3
+sleep 1
 tmux select-pane -t 6
 printf "Starting broker 2\n"
 tmux send 'bin/pre_broker_demo -n B2 -k localhost:50050 -u localhost:50051 -i B1 -d localhost:50052 -m '$security_model' -l '$ssl_cert_path ENTER
 
 
-sleep 3
+sleep 1
 tmux select-pane -t 3
 printf "Starting producer\n"
 tmux send 'bin/pre_producer_demo -n alice -k localhost:50050 -d localhost:50051 -m '$security_model' -l '$ssl_cert_path ENTER
@@ -141,7 +144,7 @@ printf "Producer completed\n"
 
 if [[ $# -eq 0 ]]; then sleep 5; else read -p "Hit any key>" ; printf "\n"; fi
 
-sleep 3
+sleep 1
 tmux select-pane -t 4
 printf "Starting consumer 1\n"
 tmux send 'bin/pre_consumer_demo -n consumer_1 -k localhost:50050 -u localhost:50052 -i B2 -c alice-consumer_1 -m '$security_model' -l '$ssl_cert_path ENTER
@@ -149,7 +152,7 @@ printf "Consumer 1 completed\n"
 
 
 
-if [[ $# -eq 0 ]]; then sleep 15; else read -p "Hit any key>" ; printf "\n"; fi
+if [[ $# -eq 0 ]]; then sleep 5; else read -p "Hit any key>" ; printf "\n"; fi
 
 tmux select-pane -t 1
 #read key from file written by pre-consumer
@@ -164,17 +167,20 @@ if [[ $# -eq 0 ]]; then sleep 1; else read -p "Hit any key>" ; printf "\n"; fi
 #display decrypted video
 mpv --geometry=$display_offset_1 --loop $Video_decrypted --really-quiet & printf "Playing decrypted video\n"  # This sends mpv render to subproc as side effect
 
-if [[ $# -eq 0 ]]; then sleep 10; else read -p "Hit any key>" ; printf "\n"; fi
+#and delete decrypted
+rm -f $Video_Decrypted
+
+if [[ $# -eq 0 ]]; then sleep 5; else read -p "Hit any key>" ; printf "\n"; fi
 
 #######################33
 tmux select-pane -t 7
 #run the palisade pre-consumer without access
-sleep 2
+sleep 1
 printf "Starting consumer 2\n"
 tmux send 'bin/pre_consumer_demo -n charlie -k localhost:50050 -u localhost:50052 -i B2 -c alice-charlie -m '$security_model' -l '$ssl_cert_path ENTER
 printf "Consumer 2 completed\n"
 
-if [[ $# -eq 0 ]]; then sleep 17; else read -p "Hit any key>" ; printf "\n"; fi
+if [[ $# -eq 0 ]]; then sleep 5; else read -p "Hit any key>" ; printf "\n"; fi
 
 tmux select-pane -t 1
 #read key from file written by pre-consumer
@@ -206,8 +212,8 @@ kill -9 "$PIDs"
 tmux kill-server
 
 #remove generated keys
-rm $producer_key_file $consumer_1_key_file $consumer_2_key_file
-rm $Video_encrypted $Video_decrypted
+rm -f $producer_key_file $consumer_1_key_file $consumer_2_key_file
+rm -f $Video_encrypted $Video_decrypted
 
 #cleanup text fies
 rm -f broker_*.txt client_*.txt server_*.txt Sender_*.txt

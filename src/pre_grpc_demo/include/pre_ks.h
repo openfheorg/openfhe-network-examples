@@ -66,7 +66,7 @@ public:
 
 			usint qmodulus = 27;
 			usint firstqmod = 27;
-			parameters.SetPREMode(lbcrypto::INDCPA);
+			//parameters.SetPREMode(lbcrypto::INDCPA);
 
 			if (security_model == "INDCPA") {
 				plaintextModulus = 2;
@@ -121,7 +121,10 @@ public:
 				parameters.SetPREMode(lbcrypto::NOISE_FLOODING_HRA);
 				parameters.SetKeySwitchTechnique(lbcrypto::HYBRID);
 				parameters.SetNumLargeDigits(dnum);
-				}
+			} else {
+			  std::cout << "Bad security model passed in: `"<<security_model<<"'"<< std::endl;
+			  exit (EXIT_FAILURE);
+			}
 
 			parameters.SetMultiplicativeDepth(multDepth);
 			parameters.SetPlaintextModulus(plaintextModulus);
