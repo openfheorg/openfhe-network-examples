@@ -20,23 +20,7 @@ PRE [demoscript_pre_grpc_tmux.sh verified, pre_server_demo
 
 `bin/pre_server_demo`
 
-[ ] manually run pre_server_demo with 5 windows [currently being verified]
-
-
-```
-
-    Currently Fails 
-	bin/pre_server_demo -n KS_1 -k localhost:50051 -a demoData/accessMaps/pre_accessmap -l .
-
-    made -m manditory -- that was the issue.
-	
-now alice cannot find key
-	
-Server's acknowledgement: Received PKEY. Thank you, Your Server]
-Server's acknowledgement public key: Received PKEY. Thank you, Your Server]
-Unable to open key file
-
-```
+[x] manually run pre_server_demo with 5 windows [currently being verified]
 
 [ ] manually run pre_server_demo with 8 windows
 

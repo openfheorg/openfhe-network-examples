@@ -258,7 +258,7 @@ automatically find the installed libraries and include files:
     example if I installed it in `/home/thisuser/opt/OpenFHE` then you need to
     run this as 
 	
-	> `cmake -DCMAKE_INSTALL_PREFIX=/home/palisade/opt/openfhe64_1_1_1/ -DProtobuf_DIR=/home/palisade/opt/grpc/lib/cmake/protobuf -DgRPC_DIR=/home/palisade/opt/grpc/lib/cmake/grpc ..`
+	> `cmake -DCMAKE_INSTALL_PREFIX=/home/palisade/opt/openfhe64_1_1_1/ -DProtobuf_DIR=/home/thisuser/opt/grpc/lib/cmake/protobuf -DgRPC_DIR=/home/palisade/opt/grpc/lib/cmake/grpc ..`
 
 	Note: If you have multiple versions (revisions) of OpenFHE on
     your system, `cmake` may find the wrong one and cause build errors
@@ -411,7 +411,7 @@ adding a second parameter after the script command:
 
 If you see an error `Cannot load libcuda.so.1` you can ignore it. It is from the `mpv` video display program.
 
-#### Running the modules manually [not verified as working]
+#### Running the modules manually [partially verified as working]
 
 *Currently under construction, see [ToDo](Todo.md) for status.*
 
@@ -430,6 +430,7 @@ following flags apply to the different processes `pre_server_demo`,
    -c channel_name (producer_name-consumer_name)
    -m security_mode (INDCPA, FIXED_NOISE_HRA, NOISE_FLOODING_HRA, NOISE_FLOODING_HRA_HYBRID) [required]
 ```
+Manual example 1:  [verified]
 
 To run the example with two brokers where consumer\_1 is connected to
 broker\_2, broker\_2 is connected to broker\_1 and producer is connected
@@ -437,15 +438,35 @@ to broker\_1, so the channel from consumer\_1 to producer alice is
 
 > `alice -> broker\_1 -> broker\_2 -> consumer\_1`
 
+be sure to delete all `*.txt` files from `bin` that may be left over
+from prior runs before running. Also remove any previous run's consumer keys with
+
+> `rm demoData/keys/consumer_aes_key_alice-consumer_1` 
+
+Generate alice's dummy AES key used for payload
+
+> `cp ../demoData/keys/producer_aes_key_P0 demoData/keys/producer_aes_key_alice`
+
+then execute the followingn in separate terminals. 
+
 > `bin/pre_server_demo -n KS_1 -k localhost:50051 -a demoData/accessMaps/pre_accessmap -m INDCPA -l .`
 
-> `bin/pre_broker_demo -n broker_1 -k localhost:50051 -d localhost:50052  -m INDCPA -l .`
+> `bin/pre_broker_demo -n B1 -k localhost:50051 -d localhost:50052  -m INDCPA -l .`
 
-> `bin/pre_broker_demo -n broker_2 -k localhost:50051 -u localhost:50052 -m INDCPA -i broker_1 -d localhost:50053 -l .`
+> `bin/pre_broker_demo -n B2 -k localhost:50051 -u localhost:50052 -m INDCPA -i B1 -d localhost:50053 -l .`
 
 > `bin/pre_producer_demo -n alice -k localhost:50051 -d localhost:50052 -m INDCPA -l .`
 
-> `bin/pre_consumer_demo -n consumer_1 -k localhost:50051 -u localhost:50053 -m INDCPA -i broker_2 -c alice-consumer_1 -l .`
+> `bin/pre_consumer_demo -n consumer_1 -k localhost:50051 -u localhost:50053 -m INDCPA -i B2 -c alice-consumer_1 -l .`
+
+The user can then verify the contents of the consumer's received data is the same as alice's sent data by comparing the content of the files
+`producer_aes_key_alice` and `consumer_aes_key_consumer_1` in the
+`demoData/keys` folder using the following script: 
+
+> `../scripts/verify_pre_output.sh demoData/keys/producer_aes_key_alice demoData/keys/consumer_aes_key_alice-consumer_1` 
+
+
+Manual example 2: [not verified]
 
 The demo can also be run across multiple trust zones (multiple key
 servers) with multiple brokers for each zone. To run an example with

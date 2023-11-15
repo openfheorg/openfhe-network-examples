@@ -187,10 +187,12 @@ public:
 		std::ifstream keyinfile;
 		std::string aes_key;
 		std::string producer_name = params.process_name;
-		keyinfile.open(params.producer_aes_key + "_" + producer_name);
+		std::string keyinfilename = params.producer_aes_key + "_" + producer_name;
+		keyinfile.open(keyinfilename);
         if (!keyinfile) {
-            std::cout << "Unable to open key file";
-            exit(1);  // terminate with error
+		  std::cout << "Unable to open key file: `" << keyinfilename <<  "'"
+					<< std::endl;
+		  exit(1);  // terminate with error
         }
 
         keyinfile >> aes_key;
