@@ -7,6 +7,15 @@ Open, Programmable, Secure 5G (OPS5G) program. Note the utility of
 these examples are valid for many forms of wireless and wireline
 networks, not just 5G networks.
 
+**This repository is still in pre-release form.** It contains several
+examples of network based FHE applications. Not all examples have been
+hardened with additional error checking or detailed installation
+instructions, and so may not operate properly. We will annotate this
+README file with status updates explicitly identify the status of each
+example system. We also suggest monitoring the [ToDo](ToDo.md) file to
+review the status of the various demonstrations before attempting to
+run them.
+
 Questions should be forwarded to the Duality Principal Investigator,
 Dr. David Bruce Cousins, email: dcousins@dualitytech.com
 
@@ -32,16 +41,22 @@ key without involving Alice). We also show the use of OpenFHE's Threshold
 Encryption (where multiple parties cooperate on a common computation
 task and all participate in decryption).
 
-**Note** several of these examples are first prototypes, and may not
+**Note 1** several of these examples are first prototypes, and may not
 represent the best way to distribute the responsibility of Crypto
 context generation, and key distribution. As we develop better
 examples, we may revise or delete earlier ones. Earlier examples will
 always be available in prior repository releases.
 
-**Note** the distribution contains a large number of unit tests for
+**Note 2** the distribution contains a large number of unit tests for
 the underlying communications frameworks in the `tests` directory. For
 information on these tests (how to add tests, run tests, etc.) visit
 the  [README.md](tests/README.md) file in the `tests` sub-directory.
+
+**Note 3** Some examples use the RAVEN network simulation framework to
+emulate a multiple domain network. This is a complex system, so users
+are advised to become familiar with the simpler client/server and
+peer-to-peer demonstrations that can be run on a multicore system (or
+smaller network).
 
 ## Acknowledgments and Distribution 
 
@@ -297,11 +312,13 @@ appropriate directory names to use.
 Before running the examples, copy the `demoData` folder into the build
 directory From the `build` directory (required by some examples).
 
+Please check that the particular example has been verified as operational. If it has not then *caveat empteurp*, beware!
+
 ## Multihop PRE Network Examples
 
 ---------------
 
-### PRE Network For AES Key Distribution Demo with multiple brokers using Google RPC
+### PRE Network For AES Key Distribution Demo with multiple brokers using Google RPC [partially verified as working]
 
 This example allows for PRE between a producer and consumer through
 multiple broker hops in multiple trust zones. Each broker either
@@ -333,6 +350,8 @@ The demo requires additional third party applications to be installed:
 > `sudo apt-get install tmux`
 
 > `sudo apt-get install mpv`
+
+#### Running the demoscript using the tmux terminal multiplexor [verified working]
 
 To run the demo, build the example by following instructions under "Building"
 
@@ -392,7 +411,9 @@ adding a second parameter after the script command:
 
 If you see an error `Cannot load libcuda.so.1` you can ignore it. It is from the `mpv` video display program.
 
+#### Running the modules manually [not verified as working]
 
+*Currently under construction, see [ToDo](Todo.md) for status.*
 
 The example demo can also be run manually in multiple terminals. The
 following flags apply to the different processes `pre_server_demo`,
@@ -466,7 +487,7 @@ and the brokers remain running.  The producer and consumer programs
 can be run again and again.
 
 
-### Single file implementation -- allows testing/timing measurment without network overhead.
+### Single file implementation -- allows testing/timing measurment without network overhead. [verified as working]
 
 ------------------------------------------------------------------
 
@@ -502,7 +523,7 @@ Running the following command runs the pre protocol with Provable HRA
 secure parameters and 5 hops.  > `bin/pre -m 2 -d 5`
 
 
-## Threshhold Network using Google RPC
+## Threshhold Network using Google RPC [verified as working]
 
 The Threshhold Network example is built with the google RPC framework
 and generalized to any number of clients. GRPC also allows
@@ -565,6 +586,7 @@ generates the sum and product over them.
 The correct output for this example would be 
 
 ```
+
 Resulting Fused Mult Plaintext: 
 ( 1 16 81 256 81 16 1 16 256 81 81 24 ... )
 
@@ -599,7 +621,7 @@ more accurate timing) using `taskset`:
 
 However you computer needs to have at least 6 logical cpus to run the script.
 
-## Threshhold Network Measurement protocol using Client-Server Google RPC (gRPC)
+## Threshhold Network Measurement protocol using Client-Server Google RPC (gRPC) [not verified as working]
 
 The structure of this implementation is very similar to the Threshold
 example. The data flow involves two nodes that send their measurement
@@ -653,7 +675,7 @@ The example can also be run using the shell scripts
 `demos/demoscript_adjacent_network_measure_same.sh` and
 `demos/demoscript_adjacent_network_measure_diff.sh`.
 
-## Peer to Peer network communication (using gRPC)
+## Peer to Peer network communication (using gRPC) [not verified as working]
 In this framework, each individual node communicates with all other
 nodes as peers. All peer to peer communications is done through the
 Node object which internally acts as both GRPC client and server. Each
@@ -729,7 +751,7 @@ command line flags:
 
 -l location of ssl certificates (or use -Wssloff)
 
-## Network Measurement & Control examples (using the peer to peer gRPC framework)
+## Network Measurement & Control examples (using the peer to peer gRPC framework) [not verified as working]
 
 To run the network measurement protocol with two nodes, open two
 terminals and run the following commands from the `build` directory:
@@ -812,3 +834,8 @@ The argument `-e` specifies the computation to be performed (add,
 multiply or vectorsum) along with whether the node aborts before
 sending the partial ciphertext. To run the example without the nodes
 aborting, only pass the computation to be performed.
+
+## RAVEN network emulation based examples [not verified as working]
+
+This set of examples have not been completely verified. For the curious please read the [README.md](raven/README.md) file in the `raven` subdirectory.
+

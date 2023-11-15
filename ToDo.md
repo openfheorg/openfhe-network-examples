@@ -1,15 +1,12 @@
 Todo
 =
 
-PRE
+PRE [demoscript_pre_grpc_tmux.sh verified, pre_server_demo 
 =
 
 `demoscript_pre_grpc_tmux.sh` 
 
 [x] verify operation and update README.md if needed.
-
- used to work, does not now. regnerated certs, doing the regeneration again. 
- 
 
 [x] should not report on failure of aes decrypt if other code fails. 
 
@@ -23,26 +20,23 @@ PRE
 
 `bin/pre_server_demo`
 
-[ ] manually run pre_server_demo with 5 windows
+[ ] manually run pre_server_demo with 5 windows [currently being verified]
 
-    Fails 
+
+```
+
+    Currently Fails 
 	bin/pre_server_demo -n KS_1 -k localhost:50051 -a demoData/accessMaps/pre_accessmap -l .
-	with 
+
+    made -m manditory -- that was the issue.
 	
-	/home/palisade/Documents/openfhe/main/src/pke/lib/scheme/bgvrns/bgvrns-parametergeneration.cpp:70 The specified ring dimension (1024) does not comply with HE standards recommendation (4096).
-	
-	
-	runs for -m INDCPA
-	so we make -m manditory that was the issue.
-	
-	
-	now alice cannot find key
+now alice cannot find key
 	
 Server's acknowledgement: Received PKEY. Thank you, Your Server]
 Server's acknowledgement public key: Received PKEY. Thank you, Your Server]
 Unable to open key file
 
-STOPPED HERE
+```
 
 [ ] manually run pre_server_demo with 8 windows
 
@@ -54,7 +48,7 @@ STOPPED HERE
  
  [x] change output to report full name of security mode 
  
-Threshold with aborts
+Threshold with aborts [in process of being verified]
 =
  
 [x] run five window example
@@ -86,10 +80,8 @@ that limits the # processors to those available.  or just keep it.
 	
 Renamed to `demoscript_threshnet_grpc_tmux.sh and demoscript_threshnet_grpc_tmux.sh`
 
-Adjacent Co-Measurement
+Adjacent Co-Measurement [not verified as working]
 ===
-
-*STOPPED HERE*
 
 `demoscript_adjacent_network_measure_diff.sh`
 
@@ -99,7 +91,7 @@ Adjacent Co-Measurement
 
 [ ] verify operation and update README.md if needed.
 
-P2P
+P2P [not verified as working]
 =
 
 `demoscript_fhe_aborts_grpc_p2p_tmux.sh`
@@ -109,7 +101,7 @@ P2P
 
 `demoscript_fhe_aborts_grpc_p2p_taskset.sh`
 
-[ ] This is not documented anywhere verify operation and update README.md if needed.
+[ ] This is not documented anywhere. Verify operation and update README.md if needed.
 
 `demoscript_p2p_adjacent_network_measure_diff.sh`
 
@@ -125,7 +117,7 @@ P2P
 [ ] verify operation and update README.md if needed.
 
 
-test code? 
+test code [not verified as working]
 --
 
 `demoscript_p2p_testbroadcast.sh`
