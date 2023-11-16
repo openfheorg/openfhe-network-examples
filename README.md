@@ -312,7 +312,7 @@ appropriate directory names to use.
 Before running the examples, copy the `demoData` folder into the build
 directory From the `build` directory (required by some examples).
 
-Please check that the particular example has been verified as operational. If it has not then *caveat empteurp*, beware!
+Please check that the particular example has been verified as operational. If it has not then *caveat emptor*, try them but beware!
 
 ## Multihop PRE Network Examples [all verified as working]
 
@@ -450,6 +450,8 @@ This is a manually configured example with two brokers, where `consumer_1` is co
 `broker_2`, `broker_2` is connected to `broker_1` and producer `alice` is connected
 to `broker_1`. The channel from `consumer_1` to producer `alice` is
 
+![manual example 1 network](docs/pre_network_1.png)
+
 > `alice -> B1 -> B2 -> consumer_1`
 
 Before running be sure to delete all `*.txt` files from `bin` that may be left over
@@ -503,7 +505,9 @@ zones). There can also be multiple brokers for each zone, allowing you
 to build distribution chains and trees for very large fan-out of
 secure data.
 
-To run an example with two trust zones with two brokers in each zone (note the use of a diffferent access map),
+To run an example with two trust zones with two brokers in each zone (note the use of a diffferent access map), run the following in multiple separate terminals. 
+
+![manual example 1 network](docs/pre_network_2.png)
 
 > `bin/pre_server_demo -n KS_1 -k localhost:50050 -a demoData/accessMaps/pre_accessmap2 -m INDCPA -l .`
 
