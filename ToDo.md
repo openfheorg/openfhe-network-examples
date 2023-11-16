@@ -10,23 +10,19 @@ PRE [demoscript_pre_grpc_tmux.sh verified, pre_server_demo
 
 [x] should not report on failure of aes decrypt if other code fails. 
 
-[x ] add checks for certs, an report if not there. 
+[x] add checks for certs, an report if not there. 
 
-[x ] add checks for demoData directory and report if not there. 
+[x] add checks for demoData directory and report if not there. 
 
-[x ] speed up demo waits.
+[x] speed up demo waits.
 
-[ ] verify the two cases using different terminals. 
+[x] verify the two cases using different terminals. 
 
 `bin/pre_server_demo`
 
 [x] manually run pre_server_demo with 5 windows [currently being verified]
 
-[ ] manually run pre_server_demo with 8 windows
-
-	cant run till 5 window version works
-
-`bin/pre`
+[x] manually run pre_server_demo with 8 windows
 
  [x] verify operation and update README.md if needed.
  
@@ -48,8 +44,6 @@ Threshold with aborts [in process of being verified]
  `demoscript_fhe_aborts_grpc_tmux.sh`
 
 [x] verify operation and update README.md if needed.
-
-does not work, some clients fail to connect try differnt port 50050 worked
 
 [ ] need to add aborts as an input parameter to demo script it is true/false
 

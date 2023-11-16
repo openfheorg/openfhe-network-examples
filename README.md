@@ -1,4 +1,4 @@
-# Duality Labs OpenFHE Experiments for OPS5G Encrypted Network Control and Secure Data Distribution with Proxy Re-Encryption
+# Duality Labs OpenFHE Experiments for Encrypted Network Mueasurement/Control and Secure Data Distribution with Proxy Re-Encryption
 
 This repository contains multiple examples of Fully Homomorphic
 Encryption (FHE) for Proxy Re Encryption and Threshold-FHE encrypted
@@ -314,11 +314,11 @@ directory From the `build` directory (required by some examples).
 
 Please check that the particular example has been verified as operational. If it has not then *caveat empteurp*, beware!
 
-## Multihop PRE Network Examples
+## Multihop PRE Network Examples [all verified as working]
 
 ---------------
 
-### PRE Network For AES Key Distribution Demo with multiple brokers using Google RPC [partially verified as working]
+### PRE Network For AES Key Distribution Demo with multiple brokers using Google RPC
 
 This example allows for PRE between a producer and consumer through
 multiple broker hops in multiple trust zones. Each broker either
@@ -351,7 +351,7 @@ The demo requires additional third party applications to be installed:
 
 > `sudo apt-get install mpv`
 
-#### Running the demoscript using the tmux terminal multiplexor [verified working]
+#### Running the demoscript using the tmux terminal multiplexor
 
 To run the demo, build the example by following instructions under "Building"
 
@@ -411,7 +411,21 @@ adding a second parameter after the script command:
 
 If you see an error `Cannot load libcuda.so.1` you can ignore it. It is from the `mpv` video display program.
 
-#### Running the modules manually [partially verified as working]
+
+A simple access control is emulated using an Access Map file (here
+`demoData/accessMaps/pre_accessmap`) that is a white list of all
+authorized consumers. This needs to be passed as a command line
+argument with the `-a` flag to the key server. If a consumer is not in
+the white list, then it is considered unauthorized.  In the above
+example When an unauthorized consumer named `charlie` requests for
+ciphertext from `broker_2`, the broker receives an empty reencryption
+key and the consumer receives a random garbage ciphertext.
+
+Once the consumer and producer are finished, the server
+and the brokers remain running.  The producer and consumer programs
+can be run again and again.
+
+#### Running the modules manually
 
 *Currently under construction, see [ToDo](Todo.md) for status.*
 
@@ -430,24 +444,24 @@ following flags apply to the different processes `pre_server_demo`,
    -c channel_name (producer_name-consumer_name)
    -m security_mode (INDCPA, FIXED_NOISE_HRA, NOISE_FLOODING_HRA, NOISE_FLOODING_HRA_HYBRID) [required]
 ```
-Manual example 1:  [verified]
+**Manual example 1:**
 
-To run the example with two brokers where consumer\_1 is connected to
-broker\_2, broker\_2 is connected to broker\_1 and producer is connected
-to broker\_1, so the channel from consumer\_1 to producer alice is
+This is a manually configured example with two brokers, where `consumer_1` is connected to
+`broker_2`, `broker_2` is connected to `broker_1` and producer `alice` is connected
+to `broker_1`. The channel from `consumer_1` to producer `alice` is
 
-> `alice -> broker\_1 -> broker\_2 -> consumer\_1`
+> `alice -> B1 -> B2 -> consumer_1`
 
-be sure to delete all `*.txt` files from `bin` that may be left over
+Before running be sure to delete all `*.txt` files from `bin` that may be left over
 from prior runs before running. Also remove any previous run's consumer keys with
 
 > `rm demoData/keys/consumer_aes_key_alice-consumer_1` 
 
-Generate alice's dummy AES key used for payload
+First generate alice's dummy AES key used for her data payload:
 
 > `cp ../demoData/keys/producer_aes_key_P0 demoData/keys/producer_aes_key_alice`
 
-then execute the followingn in separate terminals. 
+then execute the following in separate terminals. 
 
 > `bin/pre_server_demo -n KS_1 -k localhost:50051 -a demoData/accessMaps/pre_accessmap -m INDCPA -l .`
 
@@ -459,56 +473,69 @@ then execute the followingn in separate terminals.
 
 > `bin/pre_consumer_demo -n consumer_1 -k localhost:50051 -u localhost:50053 -m INDCPA -i B2 -c alice-consumer_1 -l .`
 
-The user can then verify the contents of the consumer's received data is the same as alice's sent data by comparing the content of the files
+You can then verify that the contents of the `consumer_1`'s received data
+is the same as `alice`'s sent data by comparing the content of the files
 `producer_aes_key_alice` and `consumer_aes_key_consumer_1` in the
-`demoData/keys` folder using the following script: 
+`demoData/keys` folder using the following script:
 
 > `../scripts/verify_pre_output.sh demoData/keys/producer_aes_key_alice demoData/keys/consumer_aes_key_alice-consumer_1` 
 
-
-Manual example 2: [not verified]
-
-The demo can also be run across multiple trust zones (multiple key
-servers) with multiple brokers for each zone. To run an example with
-two trust zones with two brokers in each zone,
-
-> `bin/pre_server_demo -n KS_1 -k localhost:50050 -a demoData/accessMaps/pre_accessmap -l .`
-
-> `bin/pre_server_demo -n KS_2 -k localhost:50060 -s localhost:50050 -a demoData/accessMaps/pre_accessmap -l .`
-
-> `bin/pre_broker_demo -n broker_1 -k localhost:50050 -d localhost:50051 -l .`
-
-> `bin/pre_broker_demo -n broker_2 -k localhost:50050 -u localhost:50051 -i broker_1 -d localhost:50052 -l .`
-
-> `bin/pre_producer_demo -n alice -k localhost:50050 -d localhost:50051 -l .`
-
-> `bin/pre_broker_demo -n broker_3 -k localhost:50060 -u localhost:50052 -i broker_2 -d localhost:50063 -l .`
-
-> `bin/pre_broker_demo -n broker_4 -k localhost:50060 -u localhost:50063 -i broker_3 -d localhost:50064 -l .`
-
-> `bin/pre_consumer_demo -n consumer_1 -k localhost:50060 -u localhost:50064 -i broker_4 -c alice-consumer_1 -l .`
-
-To verify that this worked, compare the content of the files
-`producer_aes_key_alice` and `consumer_aes_key_consumer_1` in the
-`demoData/keys` folder to make sure they are the same. The demo shell
-script can also be run to verify that the decrypted video plays. The
-shell script `scripts/verify_pre_output.sh` takes as input the files
-`producer_aes_key_alice` and `consumer_aes_key_consumer_1`, compares them
-and reports if they are the same or not.
-
-When an unauthorized consumer named charlie requests for ciphertext
-from broker\_2, the broker receives an empty reencryption key and the
-consumer receives garbage ciphertext. The access control is done using
-an Access Map file that is a white list of all authorized
-consumers. This needs to be passed as a command line argument with the
-`-a` flag to the key server which then parses it and stores it in a
-vector. If a consumer is not in the white list, then the consumer is
-unauthorized. Once the consumer and producer are finished, the server
+Once the consumer and producer are finished, the server
 and the brokers remain running.  The producer and consumer programs
 can be run again and again.
 
+Note if you see a node terminate with :
 
-### Single file implementation -- allows testing/timing measurment without network overhead. [verified as working]
+```
+terminate called after throwing an instance of 'lbcrypto::config_error'
+  what():  /home/palisade/opt/openfhe64_1_1_1/include/openfhe/pke/cryptocontext.h:360 Key is nullptr
+```
+
+odds are that node is not in the access list and was handed garbage keys as a result. 
+
+
+**Manual example 2:**
+
+The demo can also be run across multiple trust zones (i.e. multiple
+key servers that communicate with each other across the zones, each
+serving keys to brokers and producer/consumers within their own
+zones). There can also be multiple brokers for each zone, allowing you
+to build distribution chains and trees for very large fan-out of
+secure data.
+
+To run an example with two trust zones with two brokers in each zone (note the use of a diffferent access map),
+
+> `bin/pre_server_demo -n KS_1 -k localhost:50050 -a demoData/accessMaps/pre_accessmap2 -m INDCPA -l .`
+
+> `bin/pre_server_demo -n KS_2 -k localhost:50060 -s localhost:50050 -a demoData/accessMaps/pre_accessmap2 -m INDCPA -l .`
+
+> `bin/pre_broker_demo -n broker_1 -k localhost:50050 -d localhost:50051 -m INDCPA -l .`
+
+> `bin/pre_broker_demo -n broker_2 -k localhost:50050 -u localhost:50051 -i broker_1 -d localhost:50052 -m INDCPA -l .`
+
+> `bin/pre_broker_demo -n broker_3 -k localhost:50060 -u localhost:50052 -i broker_2 -d localhost:50063 -m INDCPA -l .`
+
+> `bin/pre_broker_demo -n broker_4 -k localhost:50060 -u localhost:50063 -i broker_3 -d localhost:50064 -m INDCPA -l .`
+
+> `bin/pre_producer_demo -n alice -k localhost:50050 -d localhost:50051 -m INDCPA -l .`
+
+> `bin/pre_consumer_demo -n consumer_1 -k localhost:50060 -u localhost:50064 -i broker_4 -c alice-consumer_1 -m INDCPA -l .`
+
+Again, you can run the producer and consumers multiple times, and verify the result as shown in the previous manual example.
+
+
+
+
+**Extensions**
+
+These modules are designed to run across networks with multiple IP
+domains. If you want to experiment with this you need to replace
+`localhost` with actual hostnames, and also (if using SSL) generate
+the appropriate certificates.  The advanced user is directed to the
+`raven` directory to see how such networks can be configured (in our
+case we use the `raven` network emulation to build our networks).
+
+### Single file PRE implementation -- allows for testing/timing measurment without network overhead. [verified as working]
 
 ------------------------------------------------------------------
 
