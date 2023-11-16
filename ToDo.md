@@ -1,7 +1,7 @@
 Todo
 =
 
-PRE [demoscript_pre_grpc_tmux.sh verified, pre_server_demo 
+PRE [all verified]
 =
 
 `demoscript_pre_grpc_tmux.sh` 
@@ -28,6 +28,8 @@ PRE [demoscript_pre_grpc_tmux.sh verified, pre_server_demo
  
  [x] change output to report full name of security mode 
  
+ [ ] update scripts to support command line arguments like `demoscript_threshnet_aborts_grpc_tmux`
+ 
 Threshold with aborts [in process of being verified]
 =
  
@@ -41,15 +43,17 @@ Threshold with aborts [in process of being verified]
 	removed the examle as the example from the readme file
  
  
- `demoscript_fhe_aborts_grpc_tmux.sh`
+ `demoscript_threshnet_grpc_tmux.sh`
 
 [x] verify operation and update README.md if needed.
 
-[ ] need to add aborts as an input parameter to demo script it is true/false
+[x] need to add aborts as an input parameter to demo script it is true/false
 
-[x] need to add abprts to the utils.cpp parameter documentation and updat readme and to announce abort in the code. 
+[x] need to add aborts to the utils.cpp parameter documentation and updat readme and to announce abort in the code. 
 
-`demoscript_fhe_aborts_grpc_taskset.sh`
+[x] verify operation of command line arguments 
+
+`demoscript_threshnet_grpc_tmux_taskset.sh`
 
 [x ] This is not documented anywhere verify operation and update README.md if needed.
 

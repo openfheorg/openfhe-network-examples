@@ -1,25 +1,72 @@
 #!/bin/bash
 
-echo "$#"
+usage()
+{
+    echo "usage: demoscript_threshnet_grpc_tmux.sh [[-i(ternactive)] [-s(sl on)] [-a(bort on)] | [-h]] "
+}
 
-if [[ $# -ne 0 ]]
+#make sure tmux is running
+tmuxout=$(pgrep tmux | head -n 1)
+echo "$tmuxout"
+
+if [[ "$tmuxout" -eq "" ]]
+then
+   echo "please run tmux in another terminal window"
+   exit
+fi
+   
+#set defaults
+interactive_on=
+ssl_on=
+aborts_on=
+operation="vectorsum"
+
+while [ "$1" != "" ]; do
+    case $1 in
+        -a | --abort )          aborts_on=1
+                                ;;
+        -i | --interactive )    interactive_on=1
+                                ;;
+        -o | --operation )      shift
+								operation=$1
+                                ;;
+        -s | --ssl )            ssl_on=1
+                                ;;
+        -h | --help )           usage
+                                exit
+                                ;;
+        * )                     usage
+                                exit 1
+    esac
+    shift
+done
+
+if [[ "$interactive_on" = 1 ]]
 then
 	echo "Running in interactive mode"
 else
 	echo "Running in non-interactive mode"
 fi
 
-#uncomment to use ssh
-#ssl_cert_path="-l ."
-#uncomment to turn off ssh
-ssl_cert_path="-Wssloff"
+if [[ "$aborts_on" = 1 ]]
+then
+	echo "Running with aborts activated"
+	abort_flag="-a"
+else
+	echo "Running without aborts"
+	abort_flag=
+fi
 
-#set operation
-operation="vectorsum"
+if [[ "$ssl_on" = 1 ]]
+then
+	echo "Running with ssl"
+	ssl_cert_path="-l ."
+else
+	echo "Running without ssl"
+	ssl_cert_path="-Wssloff"
+fi
+
 num_of_clients=5
-
-#set aborts to 0 for all clients operating, to 1 to abort two of the clients
-aborts=1
 
 sleep 2
 
@@ -54,46 +101,37 @@ tmux select-pane -t 0
 tmux split-window -v
 tmux select-pane -T 'Server'
 
-sleep 1
+
 printf "Starting server\n"
 tmux send 'bin/thresh_server -n KS -i localhost -p 50050 '$ssl_cert_path ENTER
 
-sleep 1
+
+if [[ $interactive_on -ne 1 ]]; then sleep 1; else read -p "Hit any key>" ; printf "\n"; fi
+
 tmux select-pane -t 3
 printf "Starting Client1\n"
 tmux send 'bin/thresh_client -n client1 -p 50050 -i localhost -d 1 -m 5 -c '$operation' '$ssl_cert_path ENTER
 
-sleep 1
+if [[ $interactive_on -ne 1 ]]; then sleep 1; else read -p "Hit any key>" ; printf "\n"; fi
 tmux select-pane -t 5
 printf "Starting Client2\n"
 tmux send 'bin/thresh_client -n client2 -p 50050 -i localhost -d 2 -m 5 -c '$operation' '$ssl_cert_path ENTER
 
-sleep 1
+if [[ $interactive_on -ne 1 ]]; then sleep 1; else read -p "Hit any key>" ; printf "\n"; fi
 tmux select-pane -t 2
 printf "Starting Client3\n"
-if [[ $aborts -ne 1 ]]
-then
-	tmux send 'bin/thresh_client -n client3 -p 50050 -i localhost -d 3 -m 5 -c '$operation' '$ssl_cert_path ENTER
-else
-	tmux send 'bin/thresh_client -n client3 -p 50050 -i localhost -d 3 -m 5 -a -c '$operation' '$ssl_cert_path ENTER
-fi
 
-sleep 1
+tmux send 'bin/thresh_client -n client3 -p 50050 -i localhost -d 3 -m 5 '$abort_flag' -c '$operation' '$ssl_cert_path ENTER
+
+if [[ $interactive_on -ne 1 ]]; then sleep 1; else read -p "Hit any key>" ; printf "\n"; fi
 tmux select-pane -t 4
 printf "Starting client4\n"
 tmux send 'bin/thresh_client -n client4 -p 50050 -i localhost -d 4 -m 5 -c '$operation' '$ssl_cert_path ENTER
 
-sleep 1
+if [[ $interactive_on -ne 1 ]]; then sleep 1; else read -p "Hit any key>" ; printf "\n"; fi
 tmux select-pane -t 6
-printf "Starting client5\n"
-if [[ $aborts -ne 1 ]]
-then
-	tmux send 'bin/thresh_client -n client5 -p 50050 -i localhost -d 5 -m 5 -c '$operation' '$ssl_cert_path ENTER
-else
-	tmux send 'bin/thresh_client -n client5 -p 50050 -i localhost -d 5 -m 5 -a -c '$operation' '$ssl_cert_path ENTER
-fi
-
-sleep 1
+printf "Starting client5\n"	
+tmux send 'bin/thresh_client -n client5 -p 50050 -i localhost -d 5 -m 5 '$abort_flag' -c '$operation' '$ssl_cert_path ENTER
 
 tmux select-pane -t 0
 read -p "Hit any key to close windows and shut down the Threshnet demo>"

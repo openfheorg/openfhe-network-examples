@@ -103,7 +103,12 @@ that the brokers can perform a re-encryption but cannot decrypt.
 
 The PRE Network example is built with the google RPC framework.
 Please note one has to install gRPC and Google Protobufs before this
-can be compiled (see section below). GRPC also allows authenticated
+can be compiled (see section below). Some detailed information on how
+gRPC is used for client/server examples can be found in the file
+`src/pre_grpc_demo/Grpc_files_explained.md`
+
+
+GRPC also allows authenticated
 connections between the clients and server using `ssl`. This is done by
 generating certificates for the servers and clients using the scripts
 in `scripts/authentication`. The folder in which the certificate files
@@ -539,7 +544,7 @@ the appropriate certificates.  The advanced user is directed to the
 `raven` directory to see how such networks can be configured (in our
 case we use the `raven` network emulation to build our networks).
 
-### Single file PRE implementation -- allows for testing/timing measurment without network overhead. [verified as working]
+### Single file PRE implementation -- allows for testing/timing measurment without network overhead.
 
 ------------------------------------------------------------------
 
@@ -585,12 +590,14 @@ the build folder) is passed as a command line argument to the server
 and the client targets to establish a secure channel for
 communication.
 
+### Manual examples
+
 Remember to generate certificates for these demos:
 
 > `sh ../scripts/authentication/create_nodes_cert.sh threshnet_aborts`
 
 And to run the various components (manually) in different windows in
-the `build` directory.
+the `build` directory. 
 
 Running the Server: 
 
@@ -603,19 +610,15 @@ Running the clients:
 the -d flag specifies the client id (an integer from 1 to
 total\_num\_of\_parties , 
 
--a 1 specifies to abort this node partway through the run.
-
+```
+-a specifies to abort this node partway through the run.
 -l specifies the certificate location, 
-
 -n specifies the name of the client, 
-
 -p specifies the port number of the `thresh_server_demo`, 
-
 -i specifies the hostname of the server, 
-
 -m specifies the total number of clients participating in the computation,
-
 -c for the type of computation (which can be 'add', 'multiply' or 'vectorsum')
+```
 
 For example to run a set of four clients + server on the same system,
 open five terminal windows and cd to build, and in the first enter
@@ -653,9 +656,13 @@ Remember to delete the intermediate files generated with
 
 The Threshnet example also allows to run the aborts protocol when one
 or more of parties (minority) drops off before decryption. To test
-this, we can use the `-a 1` flag to manually drop off parties. Suppose
+this, we can use the `-a` flag to manually drop off parties. Suppose
 there are three clients running, one party can drop off and the other
 parties can still complete the distributed decryption process. 
+
+*Note* different threshold schemes allow different numbers of
+participants to abort -- please read the appropriate OpenFHE
+documentation before experimenting.
 
 The demoscript runs five clients with and without aborts based on
 setting the variable aborts in the script to 1 and 0 respectively. The
