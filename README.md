@@ -1,4 +1,4 @@
-# Duality Labs OpenFHE Experiments for Encrypted Network Mueasurement/Control and Secure Data Distribution with Proxy Re-Encryption
+# Duality Labs OpenFHE Experiments for Encrypted Network Measurement/Control and Secure Data Distribution with Proxy Re-Encryption
 
 This repository contains multiple examples of Fully Homomorphic
 Encryption (FHE) for Proxy Re Encryption and Threshold-FHE encrypted
