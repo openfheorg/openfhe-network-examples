@@ -29,8 +29,9 @@ PRE [all verified]
  [x] change output to report full name of security mode 
  
  [ ] update scripts to support command line arguments like `demoscript_threshnet_aborts_grpc_tmux`
+    do merge of tmux into threshnet first. 
  
-Threshold with aborts [in process of being verified]
+Threshold with aborts [all verified]
 =
  
 [x] run five window example
@@ -61,6 +62,8 @@ does the same as tmux except uses taskset. need to have a function
 that limits the # processors to those available.  or just keep it.
 	
 Renamed to `demoscript_threshnet_grpc_tmux.sh and demoscript_threshnet_grpc_tmux.sh`
+
+[x] merge taskset into `demoscript_threshnet_grpc_tmux.sh` and delete tmux version. 
 
 Adjacent Co-Measurement [not verified as working]
 ===

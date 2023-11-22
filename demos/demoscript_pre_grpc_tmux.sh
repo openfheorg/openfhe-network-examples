@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# need to have the following as input parameters
+# security model?
+# interactive? 
+# ssl on off
+
+
 echo "$#"
 
 if [[ $# -ne 0 ]]

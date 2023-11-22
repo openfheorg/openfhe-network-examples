@@ -2,7 +2,7 @@
 
 usage()
 {
-    echo "usage: demoscript_threshnet_grpc_tmux.sh [[-i(ternactive)] [-s(sl on)] [-a(bort on)] | [-h]] "
+    echo "usage: demoscript_threshnet_grpc_tmux.sh [[-i(ternactive)] [-s(sl on)] [-a(bort on)] [-t(askset on) ] [-c(omputation add|multiply|vectorsum] | [-h]] "
 }
 
 #make sure tmux is running
@@ -19,7 +19,15 @@ fi
 interactive_on=
 ssl_on=
 aborts_on=
-operation="vectorsum"
+operation="add"
+
+taskset_on= 
+taskset_cmd_0=
+taskset_cmd_1=
+taskset_cmd_2=
+taskset_cmd_3=
+taskset_cmd_4=
+taskset_cmd_5=
 
 while [ "$1" != "" ]; do
     case $1 in
@@ -27,11 +35,13 @@ while [ "$1" != "" ]; do
                                 ;;
         -i | --interactive )    interactive_on=1
                                 ;;
-        -o | --operation )      shift
+        -c | --computatoin )      shift
 								operation=$1
                                 ;;
         -s | --ssl )            ssl_on=1
                                 ;;
+        -t | --taskset )        taskset_on=1
+								;;
         -h | --help )           usage
                                 exit
                                 ;;
@@ -66,7 +76,30 @@ else
 	ssl_cert_path="-Wssloff"
 fi
 
-num_of_clients=5
+if [[ $taskset_on = 1 ]]
+then
+	echo "Running with taskset on multiple nodes"
+	taskset_cmd_0="taskset -c 0"
+	taskset_cmd_1="taskset -c 1"
+	taskset_cmd_2="taskset -c 2"
+	taskset_cmd_3="taskset -c 3"
+	taskset_cmd_4="taskset -c 4"
+	taskset_cmd_5="taskset -c 5"
+
+	ncores=$(nproc)
+
+	if [[ $ncores -lt 6 ]]
+	then
+		echo "number of logical cores = $ncores, must be >= 6 to run this demo"	
+		exit -1
+	else
+		echo "number of logical cores = $ncores"		
+	fi
+else
+	echo "Running without taskset"
+fi
+   
+echo "computing "${operation}
 
 sleep 2
 
@@ -103,35 +136,35 @@ tmux select-pane -T 'Server'
 
 
 printf "Starting server\n"
-tmux send 'bin/thresh_server -n KS -i localhost -p 50050 '$ssl_cert_path ENTER
+tmux send "$taskset_cmd_0"' bin/thresh_server -n KS -i localhost -p 50050 '$ssl_cert_path ENTER
 
 
 if [[ $interactive_on -ne 1 ]]; then sleep 1; else read -p "Hit any key>" ; printf "\n"; fi
 
 tmux select-pane -t 3
 printf "Starting Client1\n"
-tmux send 'bin/thresh_client -n client1 -p 50050 -i localhost -d 1 -m 5 -c '$operation' '$ssl_cert_path ENTER
+tmux send "$taskset_cmd_1"' bin/thresh_client -n client1 -p 50050 -i localhost -d 1 -m 5 -c '$operation' '$ssl_cert_path ENTER
 
 if [[ $interactive_on -ne 1 ]]; then sleep 1; else read -p "Hit any key>" ; printf "\n"; fi
 tmux select-pane -t 5
 printf "Starting Client2\n"
-tmux send 'bin/thresh_client -n client2 -p 50050 -i localhost -d 2 -m 5 -c '$operation' '$ssl_cert_path ENTER
+tmux send "$taskset_cmd_2"' bin/thresh_client -n client2 -p 50050 -i localhost -d 2 -m 5 -c '$operation' '$ssl_cert_path ENTER
 
 if [[ $interactive_on -ne 1 ]]; then sleep 1; else read -p "Hit any key>" ; printf "\n"; fi
 tmux select-pane -t 2
 printf "Starting Client3\n"
 
-tmux send 'bin/thresh_client -n client3 -p 50050 -i localhost -d 3 -m 5 '$abort_flag' -c '$operation' '$ssl_cert_path ENTER
+tmux send "$taskset_cmd_3"' bin/thresh_client -n client3 -p 50050 -i localhost -d 3 -m 5 '$abort_flag' -c '$operation' '$ssl_cert_path ENTER
 
 if [[ $interactive_on -ne 1 ]]; then sleep 1; else read -p "Hit any key>" ; printf "\n"; fi
 tmux select-pane -t 4
 printf "Starting client4\n"
-tmux send 'bin/thresh_client -n client4 -p 50050 -i localhost -d 4 -m 5 -c '$operation' '$ssl_cert_path ENTER
+tmux send "$taskset_cmd_4"' bin/thresh_client -n client4 -p 50050 -i localhost -d 4 -m 5 -c '$operation' '$ssl_cert_path ENTER
 
 if [[ $interactive_on -ne 1 ]]; then sleep 1; else read -p "Hit any key>" ; printf "\n"; fi
 tmux select-pane -t 6
 printf "Starting client5\n"	
-tmux send 'bin/thresh_client -n client5 -p 50050 -i localhost -d 5 -m 5 '$abort_flag' -c '$operation' '$ssl_cert_path ENTER
+tmux send "$taskset_cmd_5"' bin/thresh_client -n client5 -p 50050 -i localhost -d 5 -m 5 '$abort_flag' -c '$operation' '$ssl_cert_path ENTER
 
 tmux select-pane -t 0
 read -p "Hit any key to close windows and shut down the Threshnet demo>"

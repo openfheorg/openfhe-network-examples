@@ -590,7 +590,7 @@ the build folder) is passed as a command line argument to the server
 and the client targets to establish a secure channel for
 communication.
 
-### Manual examples
+### Manual example
 
 Remember to generate certificates for these demos:
 
@@ -610,15 +610,20 @@ Running the clients:
 the -d flag specifies the client id (an integer from 1 to
 total\_num\_of\_parties , 
 
-```
--a specifies to abort this node partway through the run.
--l specifies the certificate location, 
--n specifies the name of the client, 
--p specifies the port number of the `thresh_server_demo`, 
--i specifies the hostname of the server, 
--m specifies the total number of clients participating in the computation,
--c for the type of computation (which can be 'add', 'multiply' or 'vectorsum')
-```
+> ` -a specifies to abort this node partway through the run.`
+
+> `	-l specifies the certificate location, `
+
+> `	-n specifies the name of the client, `
+
+> `	-p specifies the port number of the thresh_server_demo,` 
+
+> `	-i specifies the hostname of the server,` 
+
+> `	-m specifies the total number of clients participating in the computation,`
+
+> `	-c for the type of computation (which can be 'add', 'multiply' or 'vectorsum')`
+
 
 For example to run a set of four clients + server on the same system,
 open five terminal windows and cd to build, and in the first enter
@@ -664,21 +669,32 @@ parties can still complete the distributed decryption process.
 participants to abort -- please read the appropriate OpenFHE
 documentation before experimenting.
 
-The demoscript runs five clients with and without aborts based on
-setting the variable aborts in the script to 1 and 0 respectively. The
+### Scripted example
+
+The demoscript runs five clients with and without aborts. The
 variable operation in the script can be set to 'add', 'multiply' or
 'vectorsum' to run the threshold example with 5 clients with the
-corresponding operation. Once the variables are set in the script as
-required, the script can be run as
+corresponding operation. The script can be run as
 
 >`../demos/demoscript_threshnet_grpc_tmux.sh`
 
-There is also a version that runs each party on a separate node (for
-more accurate timing) using `taskset`:
+which has command line parameters:
 
->`../demos/demoscript_threshnet_grpc_tmux_taskset.sh`
 
-However you computer needs to have at least 6 logical cpus to run the script.
+> `	-i turns iternactive mode on`
+
+> `	-s turns ssl on`
+
+> `	-a turns aborts on for two nodes`
+
+> `	-c computation_name add | multiply | vectorsum`
+
+> `	-t turns taskset runs each party on a separate cpu (for more accurate timing) `
+
+> `	-h help `
+
+
+However you computer needs to have at least 6 logical cpus to run the script with `-t` enabled.
 
 ## Threshhold Network Measurement protocol using Client-Server Google RPC (gRPC) [not verified as working]
 
