@@ -19,7 +19,7 @@ No further todos.
 P2P [in verification]
 =
 
-test code [not verified as working]
+test code [ verified as working]
 --
 
 `demoscript_p2p_testnodes.sh`
@@ -30,20 +30,24 @@ test code [not verified as working]
 
 [x] verify operation and update README.md if needed.
 
+threshnet p2p [ verified as working]
+--
 
 `demoscript_fhe_aborts_grpc_p2p_tmux.sh`
 
 [x ] verify operation and update README.md if needed.
 [x ] rename this to demoscript_threshnet_p2p_tmux.sh
 
+adjacent network measurement p2p [ verified as working]
+--
+`demoscript_p2p_adjacent_network_measure.sh`
 
-`demoscript_p2p_adjacent_network_measure_diff.sh`
+[x ] verify operation and update README.md if needed.
+[x ] merge same and different. 
+[x ] build controller version demo script.
 
-[ ] verify operation and update README.md if needed.
-
-`demoscript_p2p_adjacent_network_measure_same.sh`
-
-[ ] verify operation and update README.md if needed.
+Network Path Measurment Example (P2P) [not verified as working]
+--
 
 
 `demoscript_p2p_path_measurement.sh`

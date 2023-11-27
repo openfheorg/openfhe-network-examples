@@ -562,33 +562,27 @@ For example
 
 > `bin/thresh_aborts_client -n Node1 -s localhost:50051 -m ../NetworkMaps/NetworkMap_threshnetaborts.txt -f demoData/threshnetdemo_input_file -e multiply -Wssloff`
 
-## Network Measurement & Control examples (using the p2p framework) [not verified as working]
+## Network Adjacent Co-measurement Example (P2P) [not verified as working]
 
-To run the network measurement protocol with two nodes, open two
-terminals and run the following commands from the `build` directory:
+This is a peer-to-peer version of the Network Adjacent Co-measurement example where the two nodes do not need a controller. 
+The example can be run by running the shell script
+ 
+>  `../demos/demoscript_p2p_adjacent_network_measure.sh` 
 
-> `bin/network_measure -n Node1 -s localhost:50051 -m ../NetworkMaps/NetworkMap_nm.txt -f ../demoData/threshnet_input_file_diff -Wssloff`
-
-> `bin/network_measure -n Node2 -s localhost:50052 -m ../NetworkMaps/NetworkMap_nm.txt -f ../demoData/threshnet_input_file_diff -Wssloff`
-
-There are two pairs of example input files
-(`threshnet_input_file_diff_Node1`, `threshnet_input_file_diff_Node2`)
-and (`threshnet_input_file_same_Node1`,
-`threshnet_input_file_same_Node2`) that has different and same
-measurements as input for the two nodes respectively. The example can
-also be run by running the shell script
-`demos/demoscript_p2p_adjacent_network_measure_diff.sh` and
-`demos/demoscript_p2p_adjacent_network_measure_same.sh`.
+which has the same command line parameters as the gRPC version.
 
 The network measure example with controller also can be run with peer
-to peer framework as follows:
+to peer framework as follows. In `build` generate certificates (if using ssl).
 
-> `bin/controller_network_measure -n Controller -s localhost:50053 -m ../NetworkMaps/NetworkMap_nm_controller.txt -Wssloff`
+> `sh ../scripts/authentication/create_nodes_cert.sh adjacent_network_measure_with_controller_p2p`
 
-> `bin/network_measure_with_controller -n Node1 -s localhost:50051 -m ../NetworkMaps/NetworkMap_nm_controller.txt -f ../demoData/threshnet_input_file_diff -Wssloff`
+then run 
+> `../demos/demoscript_p2p_adjacent_network_measure_controller.sh`
 
-> `bin/network_measure_with_controller -n Node2 -s localhost:50052 -m ../NetworkMaps/NetworkMap_nm_controller.txt -f ../demoData/threshnet_input_file_diff -Wssloff`
+which has the same command line parameters as the non-controller version.
 
+
+## Network Path Measurment Example (P2P) [not verified as working]
 
 The Path measurement example allows for computation of some statistics
 (such as mean, squares of mean and cubes of mean as of now) by
