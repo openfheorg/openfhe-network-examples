@@ -460,39 +460,18 @@ For example:
 
 > `bin/thresh_client_measure -i localhost -p 50000 -o localhost:50051 -d 2 -n Node2 -m 2 -s 1 -f demoData/threshnet_input_file_same -Wssloff`
 
-## Peer to Peer network communication (using gRPC) [not verified as working]
+## Peer to Peer network communication (using gRPC) [verified]
 
 In this framework, each individual node communicates with all other
 nodes as peers. All peer to peer communications is done through the
-Node object which internally acts as both GRPC client and server. Each
+`node` object which internally acts as both GRPC client and server. Each
 node connects to another node based on rules specified in a Network
 map, which is provided as input while launching each node in the
-terminal. The Node object also maintain a message queue for each of the
+terminal. The `node` object also maintain a message queue for each of the
 other nodes it is allowed to connect to, as specified in the network
 map. They can then send or get messages to and from these message
 queues as needed for applications built on top of this
 framework. 
-
-The following files define the different functionalities of the Node object.
-
-
-1. `node.h` : the node implementation class and the functions that are
-   invoked in the applications to register a node, create message
-   queues and send and get messages
-
-1. `node_internal_client.h` : create a client instance within the node
-   server to send messages to other node servers.
-
-1. `node_request.h`: The node server side processing of the messages
-   received from other nodes and assigning it to the correct message
-   queues.
-
-1. `node_server_async_base.h` : gRPC object for the node server to handle
-   async requests
-
-1. `comm_utils(.h,.cpp)` : utilities for creating the message
-   structure, message queue objects and processing command line
-   arguments.
 
 The `testnode.cpp` target file is to test the different methods
 defined for the Node service. The `networkmeasure.cpp` file runs a
@@ -508,36 +487,82 @@ Node1-Node2@localhost:50052,Node3@localhost:50053
 Node2-Node1@localhost:50051,Node3@localhost:50053
 Node3-Node1@localhost:50051,Node2@localhost:50052
 ```
+### P2P test scripts
 
 The example network map in this repo NetworkMap.txt specifies such a
 map for 5 nodes to run with testnode.
 
-To run the testnode target, copy the demoData folder into the `build`
-directory and run the following command in the terminal from the
-`build` directory
+Copy the demoData folder into the `build` directory. 
+If you wish to use `ssl`, then create certificates by running 
+the following command in the terminal from the
+`build` directory:
+
+sh ../scripts/authentication/create_nodes_cert.sh p2p_testnodes_demo
+
+
+Then run from the  `build` directory:
+
+> `demos/demoscript_p2p_testnodes.sh`.
+
+which has the followign command line options
+
+> `	-i turns iternactive mode on`
+
+> `	-s turns ssl on`
+
+> `	-h help `
+
+The individual command line parameters for `testnode` are 
 
 > `bin/testnode -n <node_name> -s <socket_address> -m <network_map_file_path> -Wssloff`
 
-Example for running a node 'Node1': 
+with command line flags:
+
+`-n node_name`
+
+`-s socket address of node`
+
+`-m location of network map file`
+
+`-f location of application input file`
+
+`-l location of ssl certificates (or use -Wssloff to disable ssl)`
+
+Example for running a node named 'Node1': 
 
 > `bin/testnode -n Node1 -s localhost:50051 -m ../NetworkMaps/NetworkMap.txt -Wssloff`
 
-The testnode example with 5 nodes can be run by running the shell
-script `demos/demoscript_p2p_testnodes.sh`.
+Another test script runs four nodes and broadcasts data from node 1 to the other nodes to test the broadcast function. 
 
-command line flags:
+> `demos/demoscript_p2p_testbroadcast.sh`
 
--n node_name
+which also has `-i` andd `-s` as command line parameters.
 
--s socket address of node
+### Threshnet with aborts demo (P2P version) [verified]
 
--m location of network map file
+A threshold network with aborts example (described previously in the gRPC
+client/server setting has been implemented in the peer-to-peer
+framework, eliminating the need for a server to route messages between the
+nodes. 
 
--f location of application input file
+It uses the same certificates as the `threshnet_aborts_demo`
 
--l location of ssl certificates (or use -Wssloff)
+run in the `build` directory
 
-## Network Measurement & Control examples (using the peer to peer gRPC framework) [not verified as working]
+> `../demos/demoscript_threshnet_p2p_tmux.sh` 
+
+it has the same command line parameters as  `threshnet_aborts_demo`.
+
+The individual command line parameters to `bin/thresh_aborts_client` are slightly different from the gRPC version since they also have to support node parameters.
+All application parameters are encoded in the `-e` flag 
+
+> `-e for the computation to process add|multiply|vectorsum or to abort concatenate -abort to abort this node before sending the partial ciphertext, i.e. add-abort`
+
+For example 
+
+> `bin/thresh_aborts_client -n Node1 -s localhost:50051 -m ../NetworkMaps/NetworkMap_threshnetaborts.txt -f demoData/threshnetdemo_input_file -e multiply -Wssloff`
+
+## Network Measurement & Control examples (using the p2p framework) [not verified as working]
 
 To run the network measurement protocol with two nodes, open two
 terminals and run the following commands from the `build` directory:
@@ -600,26 +625,6 @@ For a controller and three nodes, the example run would be the following command
 
 > `bin/network_statistics -n Node3 -s localhost:50053 -m ../NetworkMaps/NetworkMap_statisticscompute.txt -f demoData/threshnet_input_file -Wssloff`
 
-A threshold network with aborts example above in the gRPC
-client/server setting has been implemented in the peer-to-peer
-framework without the need for a server to route messages between the
-nodes. To run the example with 5 nodes where nodes 3 and 5 abort, run
-the following commands:
-
-> `bin/thresh_aborts_client -n Node1 -s localhost:50051 -m ../NetworkMaps/NetworkMap_threshnetaborts.txt -f demoData/threshnetdemo_input_file -e multiply -Wssloff`
-
-> `bin/thresh_aborts_client -n Node2 -s localhost:50052 -m ../NetworkMaps/NetworkMap_threshnetaborts.txt -f demoData/threshnetdemo_input_file -e multiply -Wssloff`
-
-> `bin/thresh_aborts_client -n Node3 -s localhost:50053 -m ../NetworkMaps/NetworkMap_threshnetaborts.txt -f demoData/threshnetdemo_input_file -e multiply-abort -Wssloff`
-
-> `bin/thresh_aborts_client -n Node4 -s localhost:50054 -m ../NetworkMaps/NetworkMap_threshnetaborts.txt -f demoData/threshnetdemo_input_file -e multiply -Wssloff`
-
-> `bin/thresh_aborts_client -n Node5 -s localhost:50055 -m ../NetworkMaps/NetworkMap_threshnetaborts.txt -f demoData/threshnetdemo_input_file -e multiply-abort -Wssloff`
-
-The argument `-e` specifies the computation to be performed (add,
-multiply or vectorsum) along with whether the node aborts before
-sending the partial ciphertext. To run the example without the nodes
-aborting, only pass the computation to be performed.
 
 ## RAVEN network emulation based examples [not verified as working]
 

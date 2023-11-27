@@ -16,17 +16,26 @@ Adjacent Co-Measurement with Threshold and gRPC [all verified]
 
 No further todos. 
 
-P2P [not verified as working]
+P2P [in verification]
 =
+
+test code [not verified as working]
+--
+
+`demoscript_p2p_testnodes.sh`
+
+[x] verify operation and update README.md if needed.
+
+`demoscript_p2p_testbroadcast.sh`
+
+[x] verify operation and update README.md if needed.
+
 
 `demoscript_fhe_aborts_grpc_p2p_tmux.sh`
 
-[ ] verify operation and update README.md if needed.
+[x ] verify operation and update README.md if needed.
+[x ] rename this to demoscript_threshnet_p2p_tmux.sh
 
-
-`demoscript_fhe_aborts_grpc_p2p_taskset.sh`
-
-[ ] This is not documented anywhere. Verify operation and update README.md if needed.
 
 `demoscript_p2p_adjacent_network_measure_diff.sh`
 
@@ -42,17 +51,6 @@ P2P [not verified as working]
 [ ] verify operation and update README.md if needed.
 
 
-test code [not verified as working]
---
-
-`demoscript_p2p_testbroadcast.sh`
-
-[ ] verify operation and update README.md if needed.
-
-
-`demoscript_p2p_testnodes.sh`
-
-[ ] verify operation and update README.md if needed.
 
 RAVEN examples [not verified as working]
 -------

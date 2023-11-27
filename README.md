@@ -140,6 +140,27 @@ is simple handshaking to detect failed nodes. There are no examples
 within this directory. Rather, all peer-to-peer examples use this
 code.
 
+
+The following files define the different functionalities of the Node object.
+
+1. `node.h` : the node implementation class and the functions that are
+   invoked in the applications to register a node, create message
+   queues and send and get messages
+
+1. `node_internal_client.h` : create a client instance within the node
+   server to send messages to other node servers.
+
+1. `node_request.h`: The node server side processing of the messages
+   received from other nodes and assigning it to the correct message
+   queues.
+
+1. `node_server_async_base.h` : gRPC object for the node server to handle
+   async requests
+
+1. `comm_utils(.h,.cpp)` : utilities for creating the message
+   structure, message queue objects and processing command line
+   arguments.
+
 ## Threshhold FHE with Abort Recovery Examples 
 
 There are a few different versions of this example: 

@@ -88,8 +88,6 @@ tmux select-pane -t 3
 tmux split-window -v
 tmux select-pane -T 'Node2'
 
-
-sleep 3
 tmux select-pane -t 1
 printf "Starting Server\n"
 

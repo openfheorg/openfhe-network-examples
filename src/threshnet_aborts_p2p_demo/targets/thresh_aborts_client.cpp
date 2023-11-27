@@ -322,6 +322,7 @@ int main(int argc, char** argv) {
 	lbcrypto::Ciphertext<lbcrypto::DCRTPoly> resultCT (nullptr), temp(nullptr);
 
     if (aborts == 1) {
+	  std::cout << "This client is Aborting the protocol and exiting." <<std::endl;
 	  exit(EXIT_FAILURE);
 	}
 
