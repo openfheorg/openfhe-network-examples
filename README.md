@@ -405,16 +405,26 @@ to open the multiple terminal windows that will show the various
    1. The unauthorized Consumer then tries to decrypts the encrypted
       AES and fails (error shown). Click on the error window to dismiss it.
    
-	  
-If you see errors like `no server running on /tmp/tmux-1000/default`
-then you forgot to run `tmux` in another window, and the demo will not
-run properly.  The script is timed so events can be seen occurring
-sequentially with built in pauses. It can also run interactively by
-adding a second parameter after the script command:
 
-> `../demos/demoscript_pre_grpc_tmux.sh interactive`
+
+The script is timed so events can be seen occurring
+sequentially with built in pauses. It can also run interactively by
+adding the '-i' parameter after the script command:
+
+> `../demos/demoscript_pre_grpc_tmux.sh -i`
 
 If you see an error `Cannot load libcuda.so.1` you can ignore it. It is from the `mpv` video display program.
+
+Other parameters include:
+
+> `-i (internactive mode on)`
+
+> `-m (security model) INDCPA|FIXED_NOISE_HRA|NOISE_FLOODING_HRA|NOISE_FLOODING_HRA_HYBRID`
+
+> `-s (ssl on)`
+
+> `-h (help)`
+
 
 
 A simple access control is emulated using an Access Map file (here
@@ -431,8 +441,6 @@ and the brokers remain running.  The producer and consumer programs
 can be run again and again.
 
 #### Running the modules manually
-
-*Currently under construction, see [ToDo](Todo.md) for status.*
 
 The example demo can also be run manually in multiple terminals. The
 following flags apply to the different processes `pre_server_demo`,

@@ -35,7 +35,7 @@ while [ "$1" != "" ]; do
                                 ;;
         -i | --interactive )    interactive_on=1
                                 ;;
-        -c | --computatoin )      shift
+        -c | --computation )      shift
 								operation=$1
                                 ;;
         -s | --ssl )            ssl_on=1
