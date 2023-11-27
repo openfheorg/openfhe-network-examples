@@ -4,25 +4,17 @@ Todo
 PRE [all verified]
 =
 
-`demoscript_pre_grpc_tmux.sh` 
-
 No further todos. 
  
-Threshold with aborts [all verified all complete]
+Threshold with aborts [all verified]
 =
 
 No further todos. 
 
-Adjacent Co-Measurement [not verified as working]
-===
+Adjacent Co-Measurement with Threshold and gRPC [all verified]
+=
 
-`demoscript_adjacent_network_measure_diff.sh`
-
-[ ] verify operation and update README.md if needed.
-
-`demoscript_adjacent_network_measure_same.sh`
-
-[ ] verify operation and update README.md if needed.
+No further todos. 
 
 P2P [not verified as working]
 =
