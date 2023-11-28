@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 example=$1
 input="../scripts/authentication/${example}/nodes"

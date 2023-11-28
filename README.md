@@ -197,10 +197,32 @@ controller.
 
 ## Network Measurement Examples (are built using the peer to peer framework for GRPC communication)
 
-Found in `src/network_measure_examples`. The examples include adjacent
-network measure between two nodes without a controller and path
-measurement. The path measurement example is to compute statistics
-among the nodes where the data is accumulated along a path of nodes.
+Found in `src/network_measure_examples`. The two examples include 
+
+1) an adjacent network measure, where two nodes take measurements of a
+shared integer value (such as the bandwidth between them) and
+determine if the measurement is the same or different in a secure
+manner. There are configurations with and without a third party
+controller node. 
+
+2) Measurement of values along a path. This example accumulates values
+in a vector from each node in a path, and computes some operations  on the
+accumulated data. This is done using threshold FHE.
+
+The current path measurement example allows for computation of some
+statistics (such as mean, squares of mean and cubes of mean as of now)
+by accumulating encrypted data along a path of nodes. A trusted
+controller receives the partial decryption shares and does the
+computation. The same ciphertext is used to accumulate data from
+multiple nodes (treated as a register). The following files are
+specific to the path measurement example
+
+1. `register_functions.h` : functions used for accumulation of data
+   into the ciphertext.
+
+1. `path_measure_crypto_functions.h, .cpp` : The cryptographic
+   functions such as joint public key, evaluation keys generation
+   along a path.
 
 # Building Instructions
 

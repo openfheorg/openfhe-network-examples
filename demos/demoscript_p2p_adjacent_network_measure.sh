@@ -48,7 +48,7 @@ then
 	echo "Running with different measurements"
 	diff_flag="diff"
 else
-	echo "Running without aborts"
+	echo "Running with same measurments"
 	diff_flag="same"
 fi
 
@@ -100,11 +100,11 @@ tmux send 'bin/network_measure -n Node2 -s localhost:50052 -m ../NetworkMaps/Net
 tmux select-pane -t 0
 read -p "Hit any key to close windows and shut down the demo>"
 
-shutdown server
+#shutdown programs if stuck
 PIDs="$(pgrep -af "network_measure" | awk '{print $1}')"
 kill -9 "$PIDs"
 
-shutdown tmux
+#shutdown tmux
 tmux kill-server
 
 #put terminal back into a good state. 
