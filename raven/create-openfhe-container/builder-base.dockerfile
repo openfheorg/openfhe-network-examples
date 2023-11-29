@@ -14,7 +14,7 @@ RUN apt update && apt install -y \
 
 RUN git clone https://github.com/openfheorg/openfhe-development.git \
 && cd openfhe-development \
-&& git checkout dev
+&& git checkout v1.1.1
 WORKDIR /openfhe-development
 RUN mkdir build
 WORKDIR build

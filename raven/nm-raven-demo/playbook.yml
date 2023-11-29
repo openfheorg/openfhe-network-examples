@@ -49,6 +49,11 @@
     - name: include our variables for the build
       include_vars: vars/hosts.yml
 
+    - name: Update apt repos
+      ansible.builtin.apt:
+       update_cache: yes
+      become: true
+
     - name: install packages
       apt:
         name: "{{ item }}"

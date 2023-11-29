@@ -2,6 +2,6 @@
 	ansible_python_interpreter=/usr/bin/python3
 
 [nodes]
+Node2
 Router1
 Node1
-Node2
