@@ -35,7 +35,7 @@ The following tar files are created:
 
 Before running the script to create the OpenFHE containers, create an
 access token from gitlab (this might be needed to clone the examples
-repository) with the following steps:
+repository) with the following steps: [todo this may not be needed since openfhe-network-examples is now public -- note I edited this code on talwar]
 
 1. Select the examples repository and go to User Settings.
 1. Click on Access Tokens on the left side menu. Enter a Token name,
@@ -52,7 +52,7 @@ sudo ./build-all-containers.sh # builds all the containers
 ```
 
 `run.sh` script creates the builder node in raven framework that is
-used to compile the palisade and ops5g examples code to create the
+used to compile the openfhe and ops5g examples code to create the
 corresponding docker images. 
 
 `build-all-containers.sh` script creates
@@ -63,7 +63,7 @@ and saves the tar files for the docker images.
 # Building raven nodes and executing scripts to run the example on those nodes 
 
 The different directories with raven uses the docker images built from
-create-palisades-container to run the following examples:
+create-openfhe-container to run the following examples:
 
  1. `nm-raven-demo`: an adjacent network measure example with two nodes
     and a router to simulate a connection between these two nodes
@@ -88,16 +88,21 @@ Steps to run examples:
 
 > `cd <examples-directory>`
 
+> `mkdir dockerimages`
+
 copy the tar files into the `<examples-directory>` (`nm-raven-demo`,
 `pre-simple-raven`, `pre-final-raven`) using the following command:
 
-> `sudo cp ../create-palisades-container/*.tar dockerimages/`
+
+> `sudo cp ../create-openfhe-container/*.tar dockerimages/`
 
 Then build and configure the raven VMs by running the following commands:
 
 > `sudo ./run.sh`
 
 > `sudo ./playbook.sh`
+
+[At this point it fails. Router1 failed. In process]
 
 ## Running with ssl
 

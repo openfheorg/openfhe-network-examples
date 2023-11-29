@@ -303,7 +303,7 @@ automatically find the installed libraries and include files:
   > ` cmake  -DProtobuf_DIR=/home/thisuser/opt/grpc/lib/cmake/protobuf -DgRPC_DIR=/home/thisuser/opt/grpc/lib/cmake/grpc ..`
 
 	Note if you used a different install directory for OpenFHE (for
-    example if I installed it in `/home/thisuser/opt/OpenFHE` then you need to
+    example if I installed it in `/home/thisuser/opt/openfhe64_1_1_1` then I would need to
     run this as 
 	
 	> `cmake -DCMAKE_INSTALL_PREFIX=/home/palisade/opt/openfhe64_1_1_1/ -DProtobuf_DIR=/home/thisuser/opt/grpc/lib/cmake/protobuf -DgRPC_DIR=/home/palisade/opt/grpc/lib/cmake/grpc ..`
