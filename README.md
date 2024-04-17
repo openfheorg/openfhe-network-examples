@@ -1,20 +1,13 @@
 # Duality Labs OpenFHE Experiments for Encrypted Network Measurement/Control and Secure Data Distribution with Proxy Re-Encryption
 
+Apr 2024: full release 3 version
+
 This repository contains multiple examples of Fully Homomorphic
 Encryption (FHE) for Proxy Re Encryption and Threshold-FHE encrypted
 network control functions developed under DARPA funding for the I2O
 Open, Programmable, Secure 5G (OPS5G) program. Note the utility of
 these examples are valid for many forms of wireless and wireline
 networks, not just 5G networks.
-
-**This repository is still in pre-release form.** It contains several
-examples of network based FHE applications. Not all examples have been
-hardened with additional error checking or detailed installation
-instructions, and so may not operate properly. We will annotate this
-README file with status updates explicitly identify the status of each
-example system. We also suggest monitoring the [ToDo](ToDo.md) file to
-review the status of the various demonstrations before attempting to
-run them.
 
 Questions should be forwarded to the Duality Principal Investigator,
 Dr. David Bruce Cousins, email: dcousins@dualitytech.com
