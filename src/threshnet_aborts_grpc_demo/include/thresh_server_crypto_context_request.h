@@ -18,7 +18,7 @@
 #include "cryptocontext-ser.h"
 #include "gen-cryptocontext.h"
 #include "scheme/bfvrns/bfvrns-ser.h"
-#include "scheme/bfvrns/cryptocontext-bfvrns.h"
+#//include "scheme/bfvrns/cryptocontext-bfvrns.h"
 #include "utils/serial.h"
 #include "utils/exception.h"
 #include <sstream>

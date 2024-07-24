@@ -20,7 +20,8 @@ RUN apt-get update && apt-get install -y libgomp1
 ENV PATH="/opt/bin:$PATH"
 
 RUN git clone https://github.com/openfheorg/openfhe-network-examples.git \
-&& cd openfhe-network-examples
+&& cd openfhe-network-examples \
+&& git checkout v3.1
 WORKDIR openfhe-network-examples
 RUN mkdir build
 WORKDIR build

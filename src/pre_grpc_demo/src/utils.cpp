@@ -8,7 +8,7 @@ bool processInputParams(int argc,  char* const argv[], Params& outParams, const 
 
     static struct option long_options[] =
     {
-		{"key_server_socket_address",                 required_argument, NULL, 'k'},
+        {"key_server_socket_address",                 required_argument, NULL, 'k'},
         {"upstream_broker_socket_address",            required_argument, NULL, 'u'},
         {"broker_socket_address",                     required_argument, NULL, 'd'},
         {"upstream_broker_name",                      required_argument, NULL, 'i'},
@@ -16,7 +16,7 @@ bool processInputParams(int argc,  char* const argv[], Params& outParams, const 
         {"channel_name",                              required_argument, NULL, 'c'},
         {"credentials_location",                      required_argument, NULL, 'l'},
         {"security_model",                            optional_argument, NULL, 'm'},
-		{"process_name",                              required_argument, NULL, 'n'},
+        {"process_name",                              required_argument, NULL, 'n'},
         {"access_map_path",                           required_argument, NULL, 'a'},
         {"no-argument options",                       no_argument,       NULL, 'W'},
         {"help",                                      no_argument,       NULL, 'h'},
@@ -74,12 +74,12 @@ bool processInputParams(int argc,  char* const argv[], Params& outParams, const 
 	  std::cerr << "error: security model is required option" << std::endl;
 	  return false;
     }
-  
+
     if (!outParams.key_server_socket_address.size()) {
         std::cerr << "error: port number is a required option" << std::endl;
         return false;
     }
-    
+
     if (!outParams.key_server_socket_address.size())
         outParams.key_server_socket_address = "0.0.0.0:00";
     //outParams.host_name = "localhost";
@@ -173,7 +173,7 @@ std::map<std::string,std::vector<std::string>> ParseRoutingTable(std::string rou
     std::map<std::string, std::vector<std::string>> channel;
     auto routingTableFile = routingtablepath + broker_name;
     std::string data;
-    
+
     std::ifstream routingTable (routingTableFile);
 
     if (!routingTable) {
@@ -207,17 +207,17 @@ void UpdateRoutingTable(std::string routingtablepath, std::string channel_name, 
     auto routingTableFile = routingtablepath + broker_name;
     std::string data;
     std::string source_sink = "";
-    
+
     std::ofstream routingTable(routingTableFile, std::ios::app);
-    
+
     if (!routingTable) {
         std::cout << "Unable to open routing table file";
         exit(EXIT_FAILURE);  // terminate with error
     }
 
-    if(source_sink_flag) 
+    if(source_sink_flag)
         source_sink = "source";
-        
+
     data = channel_name + ":" + upstream_client_name + ">" + downstream_client_name + ";" + source_sink;
 
     routingTable << data << std::endl;
@@ -260,29 +260,29 @@ std::vector<int64_t> hexstr2intvec(std::string instr, unsigned int p){
 	exit (-1);
   }
   //std::cout << "Input string `" << instr <<"'" <<std::endl;
-  
+
   unsigned int len = instr.size();
 
   //read hex string two digits at a time (one byte) from the least significant digit
 
   std::vector<unsigned char> raw_bytes = {};
-  
-  for (int ix = len-2; ix >= 0; ix -=2){
-	unsigned int i;
-	std::string s = instr.substr(ix, 2);
-	std::istringstream iss(s);
-	//std::cout << s << " = ";
 
-	iss >> std::hex >> i;
-	  
+  for (int ix = len-2; ix >= 0; ix -=2){
+    unsigned int i;
+    std::string s = instr.substr(ix, 2);
+    std::istringstream iss(s);
+    //std::cout << s << " = ";
+
+    iss >> std::hex >> i;
+
     //std::cout << i << " ";
-	raw_bytes.push_back((unsigned char) i);
+    raw_bytes.push_back((unsigned char) i);
   }
-  
+
   std::cout << std::endl;
 
   std::vector<int64_t> out = {};
-  //now convert the byte to integers mod p 
+  //now convert the byte to integers mod p
   for (size_t ix = 0; ix < raw_bytes.size(); ix++) {
 	auto tmp = (int)raw_bytes[ix];
 	for (int j = 0 ; j < 8; j++) {
@@ -312,20 +312,20 @@ std::string intvec2hexstr(const std::vector<int64_t> in_bits, unsigned int p){
   int kx =0;
   for (size_t ix = 0; ix < in_bits.size(); ix+=8) {
 	out_bytes.push_back((unsigned char) 0);
-	unsigned char tmp(0); 
+	unsigned char tmp(0);
 	for (int jx = 0 ; jx < 8; jx++) {
 	  tmp |= in_bits[ix+jx] << jx;
 	}
 	out_bytes[kx] = tmp;
 	kx++;
   }
-  
+
   unsigned int len = out_bytes.size();
-  
+
   //write hex string two digits at a time (one byte) from the least significant digit
   std::string s;
   std::ostringstream oss(s);
- 
+
   for (int ix = len-1; ix >= 0; ix-- ){
 	//std::cout << std::hex << (unsigned int) out_bytes[ix];
 	oss << std::setw(2) << std::hex << std::setfill('0') << (unsigned int)out_bytes[ix];
@@ -333,7 +333,7 @@ std::string intvec2hexstr(const std::vector<int64_t> in_bits, unsigned int p){
   }
   //std::cout << std::endl;
   oss << std::flush;
-  std::string outstr(oss.str()); 
+  std::string outstr(oss.str());
 
   //std::cout << "Output string `" << outstr <<"'" <<std::endl;
 

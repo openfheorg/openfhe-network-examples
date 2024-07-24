@@ -35,18 +35,18 @@
 
 class BrokerServerImpl final {
 public:
-	BrokerServerImpl() {}
+    BrokerServerImpl() {}
 
-	~BrokerServerImpl() {
-		server_->Shutdown();
-		// Always shutdown the completion queue after the server.
-		cq_->Shutdown();
-	}
+    ~BrokerServerImpl() {
+        server_->Shutdown();
+        // Always shutdown the completion queue after the server.
+        cq_->Shutdown();
+    }
 
-	// There is no shutdown handling in this code.
-	void Run(Params& params) {
-		grpc::ServerBuilder builder;
-		localParams = params;
+    // There is no shutdown handling in this code.
+    void Run(Params& params) {
+        grpc::ServerBuilder builder;
+        localParams = params;
 		// from https://github.com/grpc/grpc/blob/master/include/grpc/impl/codegen/grpc_types.h:
 		// GRPC doesn't set size limit for sent messages by default. However, the max size of received messages
 		// is limited by "#define GRPC_DEFAULT_MAX_RECV_MESSAGE_LENGTH (4 * 1024 * 1024)", which is only 4194304.
@@ -54,95 +54,92 @@ public:
 		//		for a client it may be "-1" (unlimited): SetMaxReceiveMessageSize(-1)
 		//		for a server INT_MAX (from #include <climits>) should do it: SetMaxReceiveMessageSize(INT_MAX)
 		// see https://nanxiao.me/en/message-length-setting-in-grpc/ for more information on the message size
-		builder.SetMaxReceiveMessageSize(INT_MAX);
+        builder.SetMaxReceiveMessageSize(INT_MAX);
 
-		std::shared_ptr<grpc::ServerCredentials> creds = nullptr;
-		if (params.disableSSLAuthentication)
-			creds = grpc::InsecureServerCredentials();
-		else {
-			grpc::SslServerCredentialsOptions::PemKeyCertPair keyCert = {
-				file2String(params.server_private_key_file),
-				file2String(params.server_cert_chain_file) };
-			grpc::SslServerCredentialsOptions opts;
-			opts.pem_root_certs = file2String(params.root_cert_file);
-			opts.pem_key_cert_pairs.push_back(keyCert);
-			creds = grpc::SslServerCredentials(opts);
-		}
-		builder.AddListeningPort(params.broker_socket_address, creds);
+        std::shared_ptr<grpc::ServerCredentials> creds = nullptr;
+        if (params.disableSSLAuthentication)
+            creds = grpc::InsecureServerCredentials();
+        else {
+            grpc::SslServerCredentialsOptions::PemKeyCertPair keyCert = { file2String(params.server_private_key_file), file2String(params.server_cert_chain_file) };
+            grpc::SslServerCredentialsOptions opts;
+            opts.pem_root_certs = file2String(params.root_cert_file);
+            opts.pem_key_cert_pairs.push_back(keyCert);
+            creds = grpc::SslServerCredentials(opts);
+        }
 
-		builder.RegisterService(&service_);
-		cq_ = builder.AddCompletionQueue();
-		server_ = builder.BuildAndStart();
+        builder.AddListeningPort(params.broker_socket_address, creds);
+        builder.RegisterService(&service_);
+
+        cq_ = builder.AddCompletionQueue();
+        server_ = builder.BuildAndStart();
 
         //clear the routing table at start
         ClearRoutingTable(params.routingtablepath + params.process_name);
 
         //initialize CC from the key server
-		BrokerKeyServerInternalClient internalClient_pre_server(params);
+        BrokerKeyServerInternalClient internalClient_pre_server(params);
 
         std::string client_name = params.process_name;
-		auto reply_cryptocontext = internalClient_pre_server.CryptoContextRequestFromServer_Broker(client_name);
-		if (!reply_cryptocontext.size())
-		        OPENFHE_THROW(lbcrypto::openfhe_error, "Received empty serialized CryptoContext");
-	
-		std::istringstream is(reply_cryptocontext);
-		lbcrypto::Serial::Deserialize(bcc, is, GlobalSerializationType);
-		if (!bcc)
-			OPENFHE_THROW(lbcrypto::deserialize_error, "De-serialized CryptoContext is NULL");
+        auto reply_cryptocontext = internalClient_pre_server.CryptoContextRequestFromServer_Broker(client_name);
+        if (!reply_cryptocontext.size())
+            OPENFHE_THROW(lbcrypto::openfhe_error, "Received empty serialized CryptoContext");
 
-		if (TEST_MODE)
-			write2File(reply_cryptocontext, "./broker_cc_received_serialized.txt");
+        std::istringstream is(reply_cryptocontext);
+        lbcrypto::Serial::Deserialize(bcc, is, GlobalSerializationType);
+        if (!bcc)
+            OPENFHE_THROW(lbcrypto::deserialize_error, "De-serialized CryptoContext is NULL");
 
-		// server's main loop.
-		
-		HandleRpcs();
-	}
+        if (TEST_MODE)
+            write2File(reply_cryptocontext, "./broker_cc_received_serialized.txt");
+
+        // server's main loop.
+        HandleRpcs();
+    }
 
 private:
-	// This can be run in multiple threads if needed.
-	void HandleRpcs() {
-		// Spawn different instances derived from CallData to serve clients.
-		
-		// to receive ciphertexts from the producer and saves it to brokerCipherTexts map with producer_name
-		new CipherTextRequestServicer(&service_, cq_.get(), localParams, bcc, brokerCipherTexts); 
+    // This can be run in multiple threads if needed.
+    void HandleRpcs() {
+        // Spawn different instances derived from CallData to serve clients.
 
-        // send re-encrypted ciphertext recursively from upstream to downstream broker - 
-		// saving reencrypted ciphertext at each broker with producer name
-		new ReEncryptedCipherTextToBrokerRequestServicer(&service_, cq_.get(), localParams, bcc, brokerCipherTexts);
+        // to receive ciphertexts from the producer and saves it to brokerCipherTexts map with producer_name
+        new CipherTextRequestServicer(&service_, cq_.get(), localParams, bcc, brokerCipherTexts);
 
-		// send re-encrypted ciphertext from upstream broker to consumer and save it in consumerCipherTexts
-		new CipherTextToConsumerRequestServicer(&service_, cq_.get(), localParams, bcc, consumerCipherTexts, brokerCipherTexts);
+        // send re-encrypted ciphertext recursively from upstream to downstream broker -
+        // saving reencrypted ciphertext at each broker with producer name
+        new ReEncryptedCipherTextToBrokerRequestServicer(&service_, cq_.get(), localParams, bcc, brokerCipherTexts);
+
+        // send re-encrypted ciphertext from upstream broker to consumer and save it in consumerCipherTexts
+        new CipherTextToConsumerRequestServicer(&service_, cq_.get(), localParams, bcc, consumerCipherTexts, brokerCipherTexts);
 
 
-		void* tag;  // uniquely identifies a request.
-		bool ok;
-		while (true) {
-			// Block waiting to read the next event from the completion queue. The
-			// event is uniquely identified by its tag, which in this case is the
-			// memory address of a CallData instance.
-			// The return value of Next should always be checked. This return value
-			// tells us whether there is any kind of event or cq_ is shutting down.
-			GPR_ASSERT(cq_->Next(&tag, &ok));
-			GPR_ASSERT(ok);
-			static_cast<CallData<pre_net::PreNetBroker::AsyncService>*>(tag)->Proceed();
-		}
-	}
+        void* tag;  // uniquely identifies a request.
+        bool ok;
+        while (true) {
+            // Block waiting to read the next event from the completion queue. The
+            // event is uniquely identified by its tag, which in this case is the
+            // memory address of a CallData instance.
+            // The return value of Next should always be checked. This return value
+            // tells us whether there is any kind of event or cq_ is shutting down.
+            GPR_ASSERT(cq_->Next(&tag, &ok));
+            GPR_ASSERT(ok);
+            static_cast<CallData<pre_net::PreNetBroker::AsyncService>*>(tag)->Proceed();
+        }
+    }
 
-	Params localParams;
-	std::unique_ptr<grpc::ServerCompletionQueue> cq_;
-	pre_net::PreNetBroker::AsyncService service_;
-	std::unique_ptr<grpc::Server> server_;
+    Params localParams;
+    std::unique_ptr<grpc::ServerCompletionQueue> cq_;
+    pre_net::PreNetBroker::AsyncService service_;
+    std::unique_ptr<grpc::Server> server_;
 
     // broker cryptocontext received from key server
-	lbcrypto::CryptoContext<lbcrypto::DCRTPoly> bcc;
+    lbcrypto::CryptoContext<lbcrypto::DCRTPoly> bcc;
 
     // map that saves reencrypted ciphertext at the broker with its producer name
-	std::unordered_map<std::string, lbcrypto::Ciphertext<lbcrypto::DCRTPoly>> brokerCipherTexts;
-	
-	// map that saves reencrypted consumer ciphertexts along with producer name
-	std::unordered_map<std::string, lbcrypto::Ciphertext<lbcrypto::DCRTPoly>> consumerCipherTexts;
+    std::unordered_map<std::string, lbcrypto::Ciphertext<lbcrypto::DCRTPoly>> brokerCipherTexts;
+
+    // map that saves reencrypted consumer ciphertexts along with producer name
+    std::unordered_map<std::string, lbcrypto::Ciphertext<lbcrypto::DCRTPoly>> consumerCipherTexts;
 };
 
 
 #endif // __BROKER_SERVER_H__
-

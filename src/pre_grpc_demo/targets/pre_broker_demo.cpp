@@ -13,14 +13,14 @@
 #include "broker_server.h"
 
 int main(int argc, char** argv) {
-	Params params;
-	//char optstring[] = "i:p:l:n:W:h";
-	if (!processInputParams(argc, argv, params)) {
-		usage(argv[0]);
-		exit(EXIT_FAILURE);
-	}
-	BrokerServerImpl brokerserver;
-	brokerserver.Run(params);
+    Params params;
+    // char optstring[] = "i:p:l:n:W:h";
+    if (!processInputParams(argc, argv, params)) {
+        usage(argv[0]);
+        exit(EXIT_FAILURE);
+    }
+    BrokerServerImpl brokerserver;
+    brokerserver.Run(params);
 
-	return 0;
+    return 0;
 }

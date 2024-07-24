@@ -13,7 +13,7 @@ then
    echo "please run tmux in another terminal window"
    exit
 fi
-   
+
 #set defaults
 interactive_on=
 ssl_on=
@@ -24,9 +24,9 @@ while [ "$1" != "" ]; do
         -i | --interactive )    interactive_on=1
                                 ;;
         -m | --model )          shift
-								security_model=$1
-								;;
-		-s | --ssl )            ssl_on=1
+                                security_model=$1
+                                ;;
+        -s | --ssl )            ssl_on=1
                                 ;;
         -h | --help )           usage
                                 exit
@@ -37,35 +37,32 @@ while [ "$1" != "" ]; do
     shift
 done
 
-echo "using security model "$security_model 
+echo "using security model "$security_model
 
 if [[ "$interactive_on" = 1 ]]
 then
-	echo "Running in interactive mode"
+    echo "Running in interactive mode"
 else
-	echo "Running in non-interactive mode"
+    echo "Running in non-interactive mode"
 fi
 
 if [[ "$ssl_on" = 1 ]]
 then
-	echo "Running with ssl"
+    echo "Running with ssl"
 
-	ssl_cert_path="."
+    ssl_cert_path="."
 
-	for certdir in KS_1 KS_2 broker_1 broker_2 broker_3 broker_4 B1 B2 alice consumer_1 consumer_2 charlie
-	do
-		if [[ ! -d "${ssl_cert_path}/${certdir}" ]]
-		then
-			echo "Certificate directory ${ssl_cert_path}/${certdir} not found, please run certificate generation script for pre_grpc_demo"
-			exit -1
-		fi
-	done	
-	
-	
+    for certdir in KS_1 KS_2 broker_1 broker_2 broker_3 broker_4 B1 B2 alice consumer_1 consumer_2 charlie
+    do
+        if [[ ! -d "${ssl_cert_path}/${certdir}" ]]
+        then
+            echo "Certificate directory ${ssl_cert_path}/${certdir} not found, please run certificate generation script for pre_grpc_demo"
+            exit -1
+        fi
+    done
 else
-	echo "Running without ssl"
-	ssl_cert_path=". -W ssloff"
-
+    echo "Running without ssl"
+    ssl_cert_path=". -W ssloff"
 fi
 
 # VIDEO
@@ -80,8 +77,8 @@ consumer_2_key_file=demoData/keys/consumer_aes_key_alice-charlie
 #verify demoDirectory exists
 if [[ ! -d demoData ]]
 then
-	echo "directory demoData not found. Please `cp -r demoData` from root directory into this directory"
-	exit -1
+    echo "directory demoData not found. Please `cp -r demoData` from root directory into this directory"
+    exit -1
 fi
 
 #clean up from previous runs
@@ -236,7 +233,7 @@ kill -9 "$PIDp"
 PIDd="$(pgrep -af "mpv" | awk '{print $1}')"
 for p in $PIDd
 do
-	kill -9 $p > /dev/null
+    kill -9 $p > /dev/null
 done
 
 
@@ -254,5 +251,5 @@ rm -f $Video_encrypted $Video_decrypted
 #cleanup text fies
 rm -f broker_*.txt client_*.txt server_*.txt Sender_*.txt
 
-#put terminal back into a good state. 
+#put terminal back into a good state.
 reset

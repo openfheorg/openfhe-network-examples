@@ -1,6 +1,6 @@
 # Duality Labs OpenFHE Experiments for Encrypted Network Measurement/Control and Secure Data Distribution with Proxy Re-Encryption
 
-Apr 2024: full release 3 version
+July 2024: full release 3.1 version - bug fixes for PRE, works with OpenFHE 1.2.0
 
 This repository contains multiple examples of Fully Homomorphic
 Encryption (FHE) for Proxy Re Encryption and Threshold-FHE encrypted
@@ -49,7 +49,7 @@ the  [README.md](tests/README.md) file in the `tests` sub-directory.
 emulate a multiple domain network. This is a complex system, so users
 are advised to become familiar with the simpler client/server and
 peer-to-peer demonstrations that can be run on a multicore system (or
-smaller network).
+smaller network) before trying the RAVEN simulations.
 
 ## Acknowledgments and Distribution 
 
@@ -263,11 +263,11 @@ It's recommended to use at least Ubuntu 19 gnu g++ 7 or greater.
 	higher for compatibility.
 	
 1. Install OpenFHE on your system. The examples codes here require using the
-   `dev` branch of OpenFHE  (note the requirement for `dev`
-   may be lifted in the future as features are released into the master
-   branch).
+   `v1.2.0` tag of the   OpenFHE `development` repository to be found 
+   [here](https://github.com/openfheorg/openfhe-development/tree/v1.2.0 "openfhe v1.2.0 repo").
+   
 
-	Full instructions for this install are to be found in the
+	Full instructions for installing OpenFHE are to be found in the
 `README.md` file in the OpenFHE repo.
 
 	Run `make install` at the end to install the system to the default
@@ -284,8 +284,7 @@ automatically find the installed libraries and include files:
 
    > `mkdir build`
 
-1. Move to that directory and run `cmake`. The examples were initially
-   built with PALISADE and have been updated to work with OpenFHE.
+1. Move to that directory and run `cmake`. 
 
    > `cd build`
    
@@ -296,17 +295,17 @@ automatically find the installed libraries and include files:
   > ` cmake  -DProtobuf_DIR=/home/thisuser/opt/grpc/lib/cmake/protobuf -DgRPC_DIR=/home/thisuser/opt/grpc/lib/cmake/grpc ..`
 
 	Note if you used a different install directory for OpenFHE (for
-    example if I installed it in `/home/thisuser/opt/openfhe64_1_1_1` then I would need to
+    example if I installed it in `/home/thisuser/opt/openfhe64_1_2_0` then I would need to
     run this as 
 	
-	> `cmake -DCMAKE_INSTALL_PREFIX=/home/palisade/opt/openfhe64_1_1_1/ -DProtobuf_DIR=/home/thisuser/opt/grpc/lib/cmake/protobuf -DgRPC_DIR=/home/palisade/opt/grpc/lib/cmake/grpc ..`
+	> `cmake -DOPENFHE_INSTALL_DIR=/home/thisuser/opt/openfhe64_1_2_0/ -DProtobuf_DIR=/home/thisuser/opt/grpc/lib/cmake/protobuf -DgRPC_DIR=/home/palisade/opt/grpc/lib/cmake/grpc ..`
 
 	Note: If you have multiple versions (revisions) of OpenFHE on
     your system, `cmake` may find the wrong one and cause build errors
     (`cmake` uses an elaborate set of search rules to find a library,
     and it may not be the version you expect). If you have strange
-    build errors, consider using the above `-DCMAKE_INSTALL_PREFIX` to
-    point to the correct version.
+    build errors, consider using the above `-DOPENFHE_INSTALL_DIR` to
+    point specifically to the correct version. Refer to the main `CMakeLists.txt` for more details. 
 
 1. Build the examples using `make`. Please note that OpenFHE
    serialization uses the `CEREAL` system for crypto object
@@ -347,6 +346,10 @@ no overlap of nodes between examples.
 
 Please look at the `scripts/authentication` directory to determine the
 appropriate directory names to use.
+
+If you are going to generate all the demo scripts then you can run the file
+
+> `sh ../scripts/authentication/create_all_demo_certs.sh`
 
 
 Several Examples are available for each feature. Please see the file 

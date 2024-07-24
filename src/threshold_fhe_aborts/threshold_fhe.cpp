@@ -22,6 +22,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include "openfhe.h"
 #include "gen-cryptocontext.h"
 #include "cryptocontext-ser.h"
 
@@ -29,13 +30,13 @@
 #include "key/key-ser.h"
 
 #include "scheme/bgvrns/bgvrns-ser.h"
-#include "scheme/bgvrns/cryptocontext-bgvrns.h"
+//#include "scheme/bgvrns/cryptocontext-bgvrns.h"
 
 #include "scheme/bfvrns/bfvrns-ser.h"
-#include "scheme/bfvrns/cryptocontext-bfvrns.h"
+//#include "scheme/bfvrns/cryptocontext-bfvrns.h"
 
 #include "scheme/ckksrns/ckksrns-ser.h"
-#include "scheme/ckksrns/cryptocontext-ckksrns.h"
+//#include "scheme/ckksrns/cryptocontext-ckksrns.h"
 
 #include "utils/serial.h"
 #include "utils/exception.h"
@@ -68,12 +69,10 @@ int main(int argc, char *argv[]) {
 }
 
 void RunBGVrnsAdditive() {
-  
-
     int plaintextModulus = 65537;
     lbcrypto::SecurityLevel securityLevel = lbcrypto::SecurityLevel::HEStd_128_classic;
 
-    lbcrypto::CCParams<lbcrypto::CryptoContextBGVRNS> parameters;		
+    lbcrypto::CCParams<lbcrypto::CryptoContextBGVRNS> parameters;
 
     parameters.SetPlaintextModulus(plaintextModulus);
     parameters.SetSecurityLevel(securityLevel);
@@ -229,7 +228,7 @@ void RunBFVrns() {
     usint digitSize = 30;
     usint dcrtBits = 60;
 
-    lbcrypto::CCParams<lbcrypto::CryptoContextBFVRNS> parameters;		
+    lbcrypto::CCParams<lbcrypto::CryptoContextBFVRNS> parameters;
 
     parameters.SetPlaintextModulus(plaintextModulus);
     parameters.SetSecurityLevel(securityLevel);
@@ -473,8 +472,7 @@ void RunBFVrns() {
 }
 
 void RunCKKS() {
-
-    int plaintextModulus = 65537;
+//    int plaintextModulus = 65537;
     double sigma = 3.2;
     lbcrypto::SecurityLevel securityLevel = lbcrypto::SecurityLevel::HEStd_128_classic;
 
@@ -483,9 +481,9 @@ void RunCKKS() {
     usint digitSize = 5;
     usint dcrtBits = 50;
     usint dnum = 2;
-    lbcrypto::CCParams<lbcrypto::CryptoContextCKKSRNS> parameters;		
+    lbcrypto::CCParams<lbcrypto::CryptoContextCKKSRNS> parameters;
 
-    parameters.SetPlaintextModulus(plaintextModulus);
+//    parameters.SetPlaintextModulus(plaintextModulus);
     parameters.SetSecurityLevel(securityLevel);
     parameters.SetStandardDeviation(sigma);
     parameters.SetSecretKeyDist(UNIFORM_TERNARY);
