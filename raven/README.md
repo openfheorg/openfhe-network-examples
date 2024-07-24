@@ -1,4 +1,5 @@
 # How to Run Examples with the RAVEN Virtual Network Emulator System [Not verified as running]
+Please note this is experimental and unsupported code. 
 
 Running examples with raven has two components:
 
@@ -33,17 +34,7 @@ The following tar files are created:
 
 ## Setup
 
-Before running the script to create the OpenFHE containers, create an
-access token from gitlab (this might be needed to clone the examples
-repository) with the following steps: [todo this may not be needed since openfhe-network-examples is now public -- note I edited this code on talwar]
 
-1. Select the examples repository and go to User Settings.
-1. Click on Access Tokens on the left side menu. Enter a Token name,
-   expiry date and choose read access.
-1. Copy the Token ID displayed after clicking on 'create personal
-   access token'.
-1. Enter this Token ID in line 22 of `builder-examples.dockerfile`
-   replacing `<<username:accesstoken>>`.
 
 ```
 cd create-openfhe-container

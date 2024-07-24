@@ -22,14 +22,15 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include "openfhe.h"
 #include "gen-cryptocontext.h"
 #include "cryptocontext-ser.h"
 
 #include "key/key.h"
 #include "key/key-ser.h"
 
-#include "scheme/bfvrns/bfvrns-ser.h"
-#include "scheme/bfvrns/cryptocontext-bfvrns.h"
+//#include "scheme/bfvrns/bfvrns-ser.h"
+//#include "scheme/bfvrns/cryptocontext-bfvrns.h"
 
 #include "utils/serial.h"
 #include "utils/exception.h"

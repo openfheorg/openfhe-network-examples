@@ -13,14 +13,14 @@
 #include "pre_ks.h"
 
 int main(int argc, char** argv) {
-	Params params;
-	
-	if (!processInputParams(argc, argv, params)) {
-		usage(argv[0]);
-		exit(EXIT_FAILURE);
-	}
-	ServerImpl server;
-	server.Run(params);
+    Params params;
 
-	return 0;
+    if (!processInputParams(argc, argv, params)) {
+        usage(argv[0]);
+        exit(EXIT_FAILURE);
+    }
+    ServerImpl server;
+    server.Run(params);
+
+    return 0;
 }

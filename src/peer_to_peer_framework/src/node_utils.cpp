@@ -10,49 +10,53 @@ bool processInputParams(int argc,  char* const argv[], CommParams& outParams, co
         {"socket_address",       required_argument, NULL, 's'},
         {"NetworkMapFile",       required_argument, NULL, 'm'},
         {"ApplicationFile",      required_argument, NULL, 'f'},
-        {"ExtraArgument",        required_argument, NULL, 'e'},
+        {"ExtraArgumentString",  required_argument, NULL, 'e'},
         {"credentials_location", required_argument, NULL, 'l'},
         {"no-argument options",  no_argument,       NULL, 'W'},
         {"help",                 no_argument,       NULL, 'h'},
         {NULL, 0, NULL, 0}
     };
-
+	
     char opt(0);
-    std::cout << "cmdline arguments " << optstring <<std::endl;
+    if (TEST_MODE){
+	  std::cout << "cmdline arguments " << optstring <<std::endl;
+	}
     while ((opt = getopt_long(argc, argv, optstring, long_options, NULL)) != -1) {
-        std::cout << "opt1: " << opt << "; optarg: " << optarg << std::endl;
-        switch (opt) {
-        case 'n':
-            outParams.NodeName = optarg;
-            break;
-        case 's':
-            outParams.socket_address = optarg;
-            break;
-        case 'm':
-            outParams.NetworkMapFile = optarg;
-            break;
-        case 'f':
-            outParams.ApplicationFile = optarg;
-            break;
-        case 'e':
-            outParams.ExtraArgument = optarg;
-            break;
-        case 'l':
-            outParams.credentials_location = optarg;
-            break;
-        case 'W':
-            if (std::string(optarg) == "ssloff")
-                outParams.disableSSLAuthentication = true;
-            // other no-argument options
-            else
-                return false;
-            break;
-        case 'h':
-        default:
-            return false;
-        }
+	  if (TEST_MODE){
+		std::cout << "opt1: " << opt << "; optarg: " << optarg << std::endl;
+	  }
+	  switch (opt) {
+	  case 'n':
+		outParams.NodeName = optarg;
+		break;
+	  case 's':
+		outParams.socket_address = optarg;
+		break;
+	  case 'm':
+		outParams.NetworkMapFile = optarg;
+		break;
+	  case 'f':
+		outParams.ApplicationFile = optarg;
+		break;
+	  case 'e':
+		outParams.ExtraArgument = optarg;
+		break;
+	  case 'l':
+		outParams.credentials_location = optarg;
+		break;
+	  case 'W':
+		if (std::string(optarg) == "ssloff")
+		  outParams.disableSSLAuthentication = true;
+		// other no-argument options
+		else
+		  return false;
+		break;
+	  case 'h':
+	  default:
+		return false;
+	  }
     }
-
+	
     if (!outParams.socket_address.size()) {
         std::cerr << "error: port number is a required option" << std::endl;
         return false;
@@ -84,7 +88,7 @@ bool processInputParams(int argc,  char* const argv[], CommParams& outParams, co
 void usage(const char* task) {
     std::cerr << "Usage: " << task << " [OPTIONS]..." << std::endl;
     std::cerr << "        [OPTIONS]:" << std::endl
-        << "        [-n name of the node" << std::endl
+        << "        [-n name of the node ]" << std::endl
         << "        [-s IP or hostname of the node server; localhost is the default with the port number]" << std::endl
         << "        [-m location of the network map file " << std::endl
         << "        [-f location of the application data file " << std::endl

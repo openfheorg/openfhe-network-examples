@@ -27,25 +27,28 @@
 #include <memory>
 #include <string>
 
-// ============================================================================================
+// ===================================================================================
 // all instances of this class created dynamically
 class MessageServicer : public nodeServerBaseClass<peer_to_peer::NodeServer::AsyncService> {
 public:
-    OPENFHE_DEBUG_FLAG(debug_flag_val);  // set to true to turn on DEBUG() statements
-	MessageServicer(peer_to_peer::NodeServer::AsyncService* service, grpc::ServerCompletionQueue* cq,
-	std::map<std::string, tsqueue<message_format>>& messages)
-		: nodeServerBaseClass(service, cq, CREATE), responder_(&ctx_), msgs(messages) {
-		Proceed();
+  OPENFHE_DEBUG_FLAG(false);  // set to true to turn on DEBUG() statements
+  MessageServicer(peer_to_peer::NodeServer::AsyncService* service, grpc::ServerCompletionQueue* cq,
+				  std::map<std::string, tsqueue<message_format>>& messages)
+	: nodeServerBaseClass(service, cq, CREATE), responder_(&ctx_), msgs(messages) {
+	Proceed();
+  }
+  
+  void Proceed() override {
+	if (status_ == CREATE) {
+	  OPENFHE_DEBUG("node_request.h: enter Proceed CREATE");		  
+	  status_ = PROCESS;
+	  
+	  service_->RequestsendGRPCMsg(&ctx_, &request_, &responder_, cq_, cq_, this);
+	  OPENFHE_DEBUG("node_request.h: exit Proceed CREATE");		  
 	}
-
-	void Proceed() override {
-		if (status_ == CREATE) {
-			status_ = PROCESS;
-
-			service_->RequestsendGRPCMsg(&ctx_, &request_, &responder_, cq_, cq_, this);
-		}
-		else if (status_ == PROCESS) {
-			new MessageServicer(service_, cq_, msgs);
+	else if (status_ == PROCESS) {
+	  OPENFHE_DEBUG("node_request.h: enter Proceed PROCESS");		  
+	  new MessageServicer(service_, cq_, msgs);
 
 			TimeVar t;
 			TIC(t);
@@ -58,17 +61,20 @@ public:
 
             auto elapsed_time = TOC_MS(t);
 
-    	    OPENFHE_DEBUG("Assigning msg to queue time: " << elapsed_time << " ms\n");
+    	    OPENFHE_DEBUG("node_request.h: msg push to queue time: " << elapsed_time << " ms\n");
 
-            OPENFHE_DEBUG("here in node_request.h before setting reply acknowledgement");
+            OPENFHE_DEBUG("node_request.h: before setting reply acknowledgement");
             reply_.set_acknowledgement(true);			
-
+            OPENFHE_DEBUG("node_request.h: after setting reply acknowledgement");
 			status_ = FINISH;
 			responder_.Finish(reply_, grpc::Status::OK, this);
+			OPENFHE_DEBUG("node_request.h: exit Proceed PROCESS");
 		}
 		else {
+		  OPENFHE_DEBUG("node_request.h: enter Proceed FINISH");		  
 			GPR_ASSERT(status_ == FINISH);
 			// Once in the FINISH state, deallocate ourselves (nodeServerBaseClass).
+			OPENFHE_DEBUG("node_request.h: deleting this");		  
 			delete this;
 		}
 	}

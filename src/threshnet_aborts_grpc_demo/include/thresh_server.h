@@ -13,6 +13,8 @@
 #ifndef __THRESH_SERVER__
 #define __THRESH_SERVER__
 
+#include "openfhe.h"
+
 #include "thresh_server_crypto_context_request.h"
 #include "thresh_server_eval_key_request.h"
 #include "thresh_server_eval_key_to_client_request.h"

@@ -54,7 +54,8 @@ public:
             grpc::SslCredentialsOptions opts = {
                 file2String(params.root_cert_file),
                 file2String(params.client_private_key_file),
-                file2String(params.client_cert_chain_file) };
+                file2String(params.client_cert_chain_file)
+            };
 
             auto channel_creds = grpc::SslCredentials(grpc::SslCredentialsOptions(opts));
             channel = grpc::CreateCustomChannel(params.upstream_broker_socket_address, channel_creds, channel_args);
@@ -62,45 +63,41 @@ public:
 
         stub_ = pre_net::PreNetBroker::NewStub(channel);
     }
-	
+
     //**************************************************************
     pre_net::MessageReturn ReEncryptedCipherTextToBroker(std::string& CT, std::string client_type, std::string client_name, std::string channel_name) {
-		pre_net::MessageRequest request;    // data to be sent to the server
-        
-		request.set_client_type(client_type);
-		request.set_client_name(client_name);
-		request.set_channel_name(channel_name);
-		
-		grpc::ClientContext context;
-		grpc::CompletionQueue cq;
-		std::unique_ptr<grpc::ClientAsyncResponseReader<pre_net::MessageReturn> > rpc(
-			stub_->PrepareAsyncReEncryptedCipherTextToBroker(&context, request, &cq));
+        pre_net::MessageRequest request;    // data to be sent to the server
 
-		rpc->StartCall();
-		pre_net::MessageReturn reply;   // data returned from the server
-		grpc::Status status;         // status of the RPC upon completion
-		rpc->Finish(&reply, &status, (void*)pre_net::RequestTag::CIPHER_TEXT_TO_BROKER_REQUEST);
+        request.set_client_type(client_type);
+        request.set_client_name(client_name);
+        request.set_channel_name(channel_name);
 
-		void* got_tag;
-		bool success = false;
-		GPR_ASSERT(cq.Next(&got_tag, &success));
+        grpc::ClientContext context;
+        grpc::CompletionQueue cq;
+        std::unique_ptr<grpc::ClientAsyncResponseReader<pre_net::MessageReturn> > rpc(
+            stub_->PrepareAsyncReEncryptedCipherTextToBroker(&context, request, &cq));
 
-		GPR_ASSERT(got_tag == (void*)pre_net::RequestTag::CIPHER_TEXT_TO_BROKER_REQUEST);
-		GPR_ASSERT(success);
+        rpc->StartCall();
+        pre_net::MessageReturn reply;   // data returned from the server
+        grpc::Status status;         // status of the RPC upon completion
+        rpc->Finish(&reply, &status, (void*)pre_net::RequestTag::CIPHER_TEXT_TO_BROKER_REQUEST);
 
-		// Act upon the status of the actual RPC.
-		if (!status.ok())
-			OPENFHE_THROW(lbcrypto::openfhe_error, status.error_message());
+        void* got_tag;
+        bool success = false;
+        GPR_ASSERT(cq.Next(&got_tag, &success));
 
-		if (reply.textavailable())
-			CT = reply.ciphertext();
+        GPR_ASSERT(got_tag == (void*)pre_net::RequestTag::CIPHER_TEXT_TO_BROKER_REQUEST);
+        GPR_ASSERT(success);
 
-		return reply;
-	}
+        // Act upon the status of the actual RPC.
+        if (!status.ok())
+            OPENFHE_THROW(lbcrypto::openfhe_error, status.error_message());
 
+        if (reply.textavailable())
+            CT = reply.ciphertext();
 
-	
-
+        return reply;
+    }
 
     //**************************************************************
 private:
@@ -108,4 +105,3 @@ private:
 };
 
 #endif // __BROKER_BROKER_INTERNAL_CLIENT_H__
-

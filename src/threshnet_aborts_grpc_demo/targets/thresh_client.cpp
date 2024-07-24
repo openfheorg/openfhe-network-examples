@@ -496,8 +496,8 @@ int main(int argc, char** argv) {
 	}
 	elapsed_seconds = TOC_MS(t);
 
-    if (TEST_MODE)
-    	std::cout << "Eval Sum key generation time: " << elapsed_seconds << " ms\n";
+        if (TEST_MODE)
+            std::cout << "Eval Sum key generation time: " << elapsed_seconds << " ms\n";
     //####################################################################################
 
 	// generate and send cipher text to the server

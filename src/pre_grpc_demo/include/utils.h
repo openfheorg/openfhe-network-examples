@@ -42,16 +42,16 @@ struct Params {
 
     // security model for PRE - INDCPA, FIXED_NOISE_HRA, NOISE_FLOODING_HRA, NOISE_FLOODING_HRA_HYBRID
     std::string security_model;
-    
+
     // flag to enable/disable authentication
-    bool        disableSSLAuthentication;
+    bool disableSSLAuthentication;
 
     // variables used in the code
     std::string key_server_socket_address;
     std::string upstream_key_server_socket_address;
     std::string broker_socket_address;
     std::string upstream_broker_name;
-    std::string upstream_broker_socket_address; 
+    std::string upstream_broker_socket_address;
     std::string channel_name;
 
     // ssl certificate files

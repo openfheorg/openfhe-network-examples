@@ -28,7 +28,7 @@
 #include <queue>
 #include <condition_variable>
 
-constexpr bool TEST_MODE = true;
+constexpr bool TEST_MODE = false;
 constexpr bool debug_flag_val = false;
 constexpr bool PAUSE_FLAG = false; 
 
