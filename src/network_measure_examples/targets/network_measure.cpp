@@ -1,5 +1,5 @@
 /***
- * � 2021 Duality Technologies, Inc. All rights reserved.
+ * (c) 2021 Duality Technologies, Inc. All rights reserved.
  * This is a proprietary software product of Duality Technologies, Inc.
  *protected under copyright laws and international copyright treaties, patent
  *law, trade secret law and other intellectual property rights of general
@@ -242,6 +242,12 @@ int main(int argc, char** argv) {
     std::istringstream fin (inputfile);
     int64_t data;
 
+	
+	if (fin.fail()){
+	  cout << "Error: can't find input file: " << inputfile << endl;
+	  exit(EXIT_FAILURE);
+	}
+	
     while (fin >> data)
     {
         vectorOfInts.push_back(data);

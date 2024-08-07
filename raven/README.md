@@ -33,7 +33,7 @@ The following tar files are created:
 
 
 ## Setup
-
+Note you need `sudo` permission to run raven examples. 
 
 
 ```
@@ -93,23 +93,25 @@ Then build and configure the raven VMs by running the following commands:
 
 > `sudo ./playbook.sh`
 
-[At this point it fails. Router1 failed. In process]
-
 ## Running with ssl
 
 To run with `ssl`, we need to first create a root certificate that is
 then used by the nodes to create their signed server and client
 certificates (this is just a dummy setup to test that `ssl` with
-certificates can be setup with raven nodes and works).
+certificates can be setup with raven nodes and works). From the root of the repo:
 
 ```
+mkdir {apropriate raven demo directory 
 cd certs/
 sh ../scripts/create_root_cert.sh
+sh ./scripts/create_cert.sh {raven demo name}
 cd ..
 
 ```
 
 # Network Measurement example with two nodes
+
+First create an `~/opt` and an `~/outputs` directory in your home directory. The scripts need this. 
 
 To run the `nm-raven-demo` example without `ssl` using the input file
 path `/data/demoData/threshnet_input_file_diff`, run
@@ -209,3 +211,7 @@ as needed in this file
 1. To run the application with `ssl`, the hostnames for the all the
    new nodes need to be specified in
    `scripts/authentication/hostnames` file.
+
+# Cleanup
+
+To cleanup and shutdown the dockers run `raven/scripts/stop_docker.sh`
