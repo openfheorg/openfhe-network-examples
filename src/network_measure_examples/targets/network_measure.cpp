@@ -244,7 +244,7 @@ int main(int argc, char** argv) {
 
 	
 	if (fin.fail()){
-	  cout << "Error: can't find input file: " << inputfile << endl;
+	  std::cout << "Error: can't find input file: " << inputfile << std::endl;
 	  exit(EXIT_FAILURE);
 	}
 	
