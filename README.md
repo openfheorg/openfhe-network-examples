@@ -45,11 +45,11 @@ the underlying communications frameworks in the `tests` directory. For
 information on these tests (how to add tests, run tests, etc.) visit
 the  [README.md](tests/README.md) file in the `tests` sub-directory.
 
-**Note 3** Some examples use the RAVEN network simulation framework to
-emulate a multiple domain network. This is a complex system, so users
-are advised to become familiar with the simpler client/server and
-peer-to-peer demonstrations that can be run on a multicore system (or
-smaller network) before trying the RAVEN simulations.
+**Note 3** Earlier releases had Some examples using the RAVEN network
+simulation framework to emulate a multiple domain network. This system
+is not well supported, and was difficult to maintain, so we removed
+support for it this release.
+
 
 ## Acknowledgments and Distribution 
 

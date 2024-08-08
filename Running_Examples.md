@@ -235,9 +235,8 @@ Again, you can run the producer and consumers multiple times, and verify the res
 These modules are designed to run across networks with multiple IP
 domains. If you want to experiment with this you need to replace
 `localhost` with actual hostnames, and also (if using SSL) generate
-the appropriate certificates.  The advanced user is directed to the
-`raven` directory to see how such networks can be configured (in our
-case we use the `raven` network emulation to build our networks).
+the appropriate certificates.
+
 
 ### Single file PRE implementation -- allows for testing/timing measurment without network overhead.
 
@@ -626,8 +625,4 @@ For a controller and three nodes, the example run would be the following command
 
 > `bin/network_statistics -n Node3 -s localhost:50053 -m ../NetworkMaps/NetworkMap_statisticscompute.txt -f demoData/threshnet_input_file -Wssloff`
 
-
-## RAVEN network emulation based examples [not verified as running for release 3.1]
-
-This set of examples have not been  verified as running. For the curious please read the [README.md](raven/README.md) file in the `raven` subdirectory. 
 
