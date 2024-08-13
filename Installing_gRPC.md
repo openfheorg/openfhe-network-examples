@@ -9,16 +9,16 @@ appropriately set `CMAKE_INSTALL_PREFIX`, because there is no easy way
 to uninstall gRPC after you've installed it globally. For example
 `~/.local/`
 
-	export MY\_INSTALL\_DIR=$HOME/.local
+	export MY_INSTALL_DIR=$HOME/.local
 
 Ensure that the directory exists	
 
-	mkdir -p $MY\_INSTALL\_DIR
+	mkdir -p $MY_INSTALL_DIR
 
-Check if `"$MY\_INSTALL\_DIR/bin"` is in your `$PATH`. If not then add
+Check if `"$MY_INSTALL_DIR/bin"` is in your `$PATH`. If not then add
 the local bin folder to your path variable
 
-	export PATH="$MY\_INSTALL\_DIR/bin:$PATH"
+	export PATH="$MY_INSTALL_DIR/bin:$PATH"
 
 
 Check cmake version (`cmake --version`) or install `cmake` and check its
@@ -29,7 +29,7 @@ version. It should be 3.13 or later
 If `cmake`'s version is still old, reinstall it	
 
 	wget -q -O cmake-linux.sh https://github.com/Kitware/CMake/releases/download/v3.19.6/cmake-3.19.6-Linux-x86_64.sh
-	sh cmake-linux.sh -- --skip-license --prefix=$MY\_INSTALL\_DIR
+	sh cmake-linux.sh -- --skip-license --prefix=$MY_INSTALL_DIR
 	rm cmake-linux.sh
 
 Install other tools	
@@ -47,13 +47,13 @@ Check for the current version of grpc and clone the repo including all necessary
 	cd grpc
 	mkdir -p cmake/build
 	pushd cmake/build
-	cmake -DgRPC\_INSTALL=ON -DgRPC\_BUILD\_TESTS=OFF -DCMAKE\_INSTALL\_PREFIX=$MY\_INSTALL\_DIR ../..
+	cmake -DgRPC_INSTALL=ON -DgRPC_BUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=$MY_INSTALL_DIR ../..
 	make -j
 	make install
 	popd
-	mkdir -p third\_party/abseil-cpp/cmake/build
-	pushd third\_party/abseil-cpp/cmake/build
-	cmake -DCMAKE\_INSTALL\_PREFIX=$MY\_INSTALL\_DIR -DCMAKE\_POSITION\_INDEPENDENT\_CODE=TRUE ../..
+	mkdir -p third_party/abseil-cpp/cmake/build
+	pushd third_party/abseil-cpp/cmake/build
+	cmake -DCMAKE_INSTALL_PREFIX=$MY_INSTALL_DIR -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE ../..
 	make -j
 	make install
 	popd
